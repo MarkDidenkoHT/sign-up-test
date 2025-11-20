@@ -1,7 +1,7 @@
 {
-  "name": "nail-booking-server",
+  "name": "nail-booking-app",
   "version": "1.0.0",
-  "description": "Server for nail booking application",
+  "description": "Nail booking application",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
@@ -9,7 +9,6 @@
   "dependencies": {
     "express": "^4.18.2",
     "cors": "^2.8.5",
-    "@supabase/supabase-js": "^2.38.0",
-    "node-fetch": "^2.6.7"
+    "@supabase/supabase-js": "^2.38.0"
   }
 }

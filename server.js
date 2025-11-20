@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static('public'));
 
 // Supabase client
 const supabase = createClient(CONFIG.SUPABASE.URL, CONFIG.SUPABASE.ANON_KEY);
@@ -21,6 +21,10 @@ const supabase = createClient(CONFIG.SUPABASE.URL, CONFIG.SUPABASE.ANON_KEY);
 app.post('/api/login', async (req, res) => {
     try {
         const { name, phone, profile_id } = req.body;
+        
+        if (!name || !phone || !profile_id) {
+            return res.status(400).json({ error: 'Missing required fields' });
+        }
         
         // Check if profile exists
         const { data: existingProfile, error: checkError } = await supabase
@@ -37,16 +41,12 @@ app.post('/api/login', async (req, res) => {
         if (!existingProfile) {
             const { error: insertError } = await supabase
                 .from('profiles')
-                .insert([
-                    { 
-                        user_profile_id: profile_id,
-                        role: 'client'
-                    }
-                ]);
+                .insert([{ 
+                    user_profile_id: profile_id,
+                    role: 'client'
+                }]);
 
-            if (insertError) {
-                throw insertError;
-            }
+            if (insertError) throw insertError;
         }
 
         res.json({ success: true, profile_id });
@@ -64,15 +64,7 @@ app.get('/api/masters', async (req, res) => {
             .select('*');
 
         if (error) throw error;
-
-        // Add some default data for demo
-        const mastersWithDefaults = data.map(master => ({
-            ...master,
-            image: master.image || '/images/professional-nail-technician-woman-in-elegant-salo.jpg',
-            experience: master.experience || '5'
-        }));
-
-        res.json(mastersWithDefaults);
+        res.json(data);
     } catch (error) {
         console.error('Error fetching masters:', error);
         res.status(500).json({ error: 'Internal server error' });
@@ -99,21 +91,23 @@ app.post('/api/booking', async (req, res) => {
     try {
         const { user_profile_id, service_type, master_id, request_time } = req.body;
 
+        if (!user_profile_id || !service_type || !master_id || !request_time) {
+            return res.status(400).json({ error: 'Missing required fields' });
+        }
+
         const { data, error } = await supabase
             .from('requests')
-            .insert([
-                {
-                    user_profile_id,
-                    service_type,
-                    master_id,
-                    request_time,
-                    created_at: new Date().toISOString()
-                }
-            ]);
+            .insert([{
+                user_profile_id,
+                service_type,
+                master_id,
+                request_time,
+                created_at: new Date().toISOString()
+            }]);
 
         if (error) throw error;
 
-        res.json({ success: true, booking_id: data[0]?.id });
+        res.json({ success: true });
     } catch (error) {
         console.error('Error creating booking:', error);
         res.status(500).json({ error: 'Internal server error' });
@@ -156,5 +150,4 @@ app.get('*', (req, res) => {
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
-    console.log(`Visit: http://localhost:${PORT}`);
 });
