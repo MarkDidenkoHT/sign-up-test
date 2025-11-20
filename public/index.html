@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Запись на маникюр</title>
+    <meta name="description" content="Онлайн-запись на маникюр">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        :root {
+            --gold: #D4AF37;
+            --background: #fff;
+            --foreground: #000;
+            --card: #fff;
+            --card-foreground: #000;
+            --border: #e5e5e5;
+            --muted-foreground: #666;
+            --secondary: #f5f5f5;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <h2 style="color: var(--gold); text-align: center; margin-bottom: 2rem;">Вход в систему</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="userName">Ваше имя:</label>
+                    <input type="text" id="userName" required placeholder="Введите ваше имя">
+                </div>
+                <div class="form-group">
+                    <label for="userPhone">Номер телефона:</label>
+                    <input type="tel" id="userPhone" required placeholder="+7 (999) 999-99-99">
+                </div>
+                <button type="submit" class="btn-primary">Войти</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="mainApp" class="hidden">
+        <div class="min-h-screen bg-background">
+            <div class="max-w-4xl mx-auto px-4 py-8 md:py-12">
+                <header class="text-center mb-2">
+                    <h1 class="text-5xl md:text-6xl font-bold mb-3 text-balance" style="color:var(--gold)">Golden Nails Studio</h1>
+                    <p class="text-lg text-muted-foreground font-light">Запишитесь на процедуру в удобное время</p>
+                </header>
+
+                <!-- Master Selection -->
+                <div class="mb-4 md:mb-8">
+                    <div class="bg-card rounded-xl p-6 shadow-lg border border-border">
+                        <label class="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-lg font-semibold mb-4 block text-center">Выберите мастера</label>
+                        <div class="relative">
+                            <div class="overflow-hidden">
+                                <div class="flex transition-transform duration-300 ease-in-out" id="mastersSlider" style="transform:translateX(-0%)">
+                                    <!-- Masters will be loaded here -->
+                                </div>
+                            </div>
+                            <button class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 bg-card border-2 border-border rounded-full p-2 shadow-lg hover:border-gold transition-colors z-10" id="prevMaster" aria-label="Предыдущий мастер">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-left w-5 h-5">
+                                    <path d="m15 18-6-6 6-6"></path>
+                                </svg>
+                            </button>
+                            <button class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 bg-card border-2 border-border rounded-full p-2 shadow-lg hover:border-gold transition-colors z-10" id="nextMaster" aria-label="Следующий мастер">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right w-5 h-5">
+                                    <path d="m9 18 6-6-6-6"></path>
+                                </svg>
+                            </button>
+                            <div class="flex justify-center gap-2 mt-4" id="masterDots">
+                                <!-- Dots will be generated here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Services Selection -->
+                <div class="mb-4 md:mb-8" id="servicesSection" style="display: none;">
+                    <div class="bg-card rounded-xl p-6 shadow-sm border border-border">
+                        <h2 class="text-2xl font-semibold mb-4 text-center" style="color:var(--gold)">Выберите услугу</h2>
+                        <div id="servicesList" class="grid gap-3">
+                            <!-- Services will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Calendar -->
+                <div class="mb-4 md:mb-8">
+                    <div class="bg-card rounded-xl p-6 shadow-sm border border-border">
+                        <div class="flex items-center justify-between mb-6">
+                            <button id="prevMonth" class="p-2 hover:bg-secondary rounded-lg">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-left h-5 w-5">
+                                    <path d="m15 18-6-6 6-6"></path>
+                                </svg>
+                            </button>
+                            <div class="text-center">
+                                <h2 id="currentMonth" class="text-2xl md:text-3xl font-semibold" style="color:var(--gold)"></h2>
+                            </div>
+                            <button id="nextMonth" class="p-2 hover:bg-secondary rounded-lg">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right h-5 w-5">
+                                    <path d="m9 18 6-6-6-6"></path>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div class="grid grid-cols-7 gap-2 mb-4">
+                            <div class="text-center text-sm font-medium text-muted-foreground py-2">Пн</div>
+                            <div class="text-center text-sm font-medium text-muted-foreground py-2">Вт</div>
+                            <div class="text-center text-sm font-medium text-muted-foreground py-2">Ср</div>
+                            <div class="text-center text-sm font-medium text-muted-foreground py-2">Чт</div>
+                            <div class="text-center text-sm font-medium text-muted-foreground py-2">Пт</div>
+                            <div class="text-center text-sm font-medium text-muted-foreground py-2">Сб</div>
+                            <div class="text-center text-sm font-medium text-muted-foreground py-2">Вс</div>
+                        </div>
+                        <div id="calendarGrid" class="space-y-2">
+                            <!-- Calendar will be generated here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Time Selection -->
+                <div class="mb-4 md:mb-8" id="timeSection" style="display: none;">
+                    <div class="bg-card rounded-xl p-6 shadow-sm border border-border">
+                        <h2 class="text-2xl font-semibold mb-4 text-center" style="color:var(--gold)">Выберите время</h2>
+                        <div id="timeSlots" class="grid grid-cols-4 gap-3">
+                            <!-- Time slots will be generated here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Booking Summary -->
+                <div class="mb-4 md:mb-8" id="bookingSummary" style="display: none;">
+                    <div class="bg-card rounded-xl p-6 shadow-sm border border-border">
+                        <h2 class="text-2xl font-semibold mb-4 text-center" style="color:var(--gold)">Подтверждение записи</h2>
+                        <div id="summaryContent" class="text-center">
+                            <!-- Summary will be shown here -->
+                        </div>
+                        <button id="confirmBooking" class="btn-primary w-full mt-4">Подтвердить запись</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
