@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const { createClient } = require('@supabase/supabase-js');
-const CONFIG = require('../config.js');
+const CONFIG = require('./config.js');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
