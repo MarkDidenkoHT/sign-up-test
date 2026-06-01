@@ -1,12 +1,9 @@
 'use strict';
 
-const supabase = require('../utils/db');
+const supabase = require('../db');
 
 function getSupabase() {
-  return createClient(
-    process.env.SUPABASE_MAIN_URL,
-    process.env.SUPABASE_SERVICE_KEY
-  );
+  return supabase;
 }
 
 async function getCronRecord(supabase, functionName) {
