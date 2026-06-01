@@ -8,7 +8,7 @@ const supabase = createClient(
     process.env.SUPABASE_SERVICE_KEY
 );
 
-const ADMIN_ROLES = ['admin', 'shop_director', 'hr'];
+const ADMIN_ROLES = ['admin', 'shop_director', 'hr', 'accountant'];
 
 const SAFE_USER_SELECT = 'chat_id, user_name, role, access, user_department, user_team, id_1c, time_arrive, time_leave, notify_violations, work_days';
 
