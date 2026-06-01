@@ -456,38 +456,97 @@ function showLoginForm() {
                         <img src="https://hi-tech.md/images/m1/app/logo_glowing_animated_2.svg" alt="Hi-Tech Logo" class="login-logo">
                         <h1 class="login-title">Hi-Tech</h1>
                     </div>
-                    
+
                     <h2 class="login-subtitle">Вход в систему</h2>
 
-                    <form id="loginForm" class="login-form">
-                        <div class="login-form-group">
-                            <label for="chat_id" class="login-label">Логин</label>
-                            <input
-                                type="text"
-                                id="chat_id"
-                                name="chat_id"
-                                required
-                                class="login-input"
-                                placeholder="Введите логин"
-                            />
-                        </div>
+                    <div id="loginView">
+                        <form id="loginForm" class="login-form">
+                            <div class="login-form-group">
+                                <label for="login_id" class="login-label">Логин</label>
+                                <input
+                                    type="text"
+                                    id="login_id"
+                                    name="login_id"
+                                    required
+                                    class="login-input"
+                                    placeholder="Введите логин"
+                                    autocomplete="username"
+                                />
+                            </div>
 
-                        <div class="login-form-group">
-                            <label for="password" class="login-label">Пароль</label>
-                            <input
-                                type="password"
-                                id="password"
-                                name="password"
-                                required
-                                class="login-input"
-                                placeholder="Введите пароль"
-                            />
-                        </div>
+                            <div class="login-form-group">
+                                <label for="login_password" class="login-label">Пароль</label>
+                                <input
+                                    type="password"
+                                    id="login_password"
+                                    name="login_password"
+                                    required
+                                    class="login-input"
+                                    placeholder="Введите пароль"
+                                    autocomplete="current-password"
+                                />
+                            </div>
 
-                        <button type="submit" class="login-submit-btn">
-                            Войти
-                        </button>
-                    </form>
+                            <button type="submit" class="login-submit-btn">
+                                Войти
+                            </button>
+                        </form>
+
+                        <div class="login-forgot-link">
+                            <button type="button" id="forgotPasswordBtn" class="login-link-btn">Забыли пароль?</button>
+                        </div>
+                    </div>
+
+                    <div id="resetStep1View" style="display:none;">
+                        <p class="login-reset-hint">Введите ваш логин. Мы отправим код подтверждения в Telegram.</p>
+                        <form id="resetStep1Form" class="login-form">
+                            <div class="login-form-group">
+                                <label for="reset_login_id" class="login-label">Логин</label>
+                                <input
+                                    type="text"
+                                    id="reset_login_id"
+                                    name="reset_login_id"
+                                    required
+                                    class="login-input"
+                                    placeholder="Введите логин"
+                                    autocomplete="username"
+                                />
+                            </div>
+                            <button type="submit" class="login-submit-btn">Получить код</button>
+                        </form>
+                        <div class="login-forgot-link">
+                            <button type="button" id="backToLoginBtn1" class="login-link-btn">← Назад</button>
+                        </div>
+                    </div>
+
+                    <div id="resetStep2View" style="display:none;">
+                        <p class="login-reset-hint">Введите код подтверждения, который пришёл вам в Telegram.</p>
+                        <form id="resetStep2Form" class="login-form">
+                            <div class="login-form-group">
+                                <label for="reset_code" class="login-label">Код подтверждения</label>
+                                <input
+                                    type="text"
+                                    id="reset_code"
+                                    name="reset_code"
+                                    required
+                                    class="login-input"
+                                    placeholder="Введите код"
+                                    autocomplete="off"
+                                />
+                            </div>
+                            <button type="submit" class="login-submit-btn">Сбросить пароль</button>
+                        </form>
+                        <div class="login-forgot-link">
+                            <button type="button" id="backToLoginBtn2" class="login-link-btn">← Назад</button>
+                        </div>
+                    </div>
+
+                    <div id="resetSuccessView" style="display:none;">
+                        <p class="login-reset-hint">✅ Новый пароль отправлен администратору. Обратитесь к нему для получения пароля.</p>
+                        <div class="login-forgot-link">
+                            <button type="button" id="backToLoginBtn3" class="login-link-btn">← Вернуться ко входу</button>
+                        </div>
+                    </div>
 
                     <div class="login-theme-toggle">
                         <span class="login-theme-label">Тема:</span>
@@ -502,7 +561,70 @@ function showLoginForm() {
     `;
     loginDiv.style.display = "";
 
+    let resetLoginId = null;
+
+    const showView = (id) => {
+        ['loginView', 'resetStep1View', 'resetStep2View', 'resetSuccessView'].forEach(v => {
+            document.getElementById(v).style.display = v === id ? '' : 'none';
+        });
+    };
+
     document.getElementById("loginForm").addEventListener("submit", handleLogin);
+
+    document.getElementById("forgotPasswordBtn").addEventListener("click", () => showView('resetStep1View'));
+    document.getElementById("backToLoginBtn1").addEventListener("click", () => showView('loginView'));
+    document.getElementById("backToLoginBtn2").addEventListener("click", () => showView('loginView'));
+    document.getElementById("backToLoginBtn3").addEventListener("click", () => showView('loginView'));
+
+    document.getElementById("resetStep1Form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const btn = e.target.querySelector('button[type="submit"]');
+        const originalText = btn.textContent;
+        btn.disabled = true;
+        btn.textContent = 'Отправка...';
+        const loginVal = document.getElementById("reset_login_id").value.trim();
+        try {
+            await fetch('/api/password-reset/request', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: loginVal })
+            });
+            resetLoginId = loginVal;
+            showView('resetStep2View');
+        } catch (err) {
+            alert('Ошибка. Попробуйте позже.');
+        } finally {
+            btn.disabled = false;
+            btn.textContent = originalText;
+        }
+    });
+
+    document.getElementById("resetStep2Form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const btn = e.target.querySelector('button[type="submit"]');
+        const originalText = btn.textContent;
+        btn.disabled = true;
+        btn.textContent = 'Проверка...';
+        const code = document.getElementById("reset_code").value.trim();
+        try {
+            const res = await fetch('/api/password-reset/verify', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: resetLoginId, id_1c: code })
+            });
+            const data = await res.json();
+            if (data.success) {
+                showView('resetSuccessView');
+            } else {
+                alert('Неверный код подтверждения.');
+            }
+        } catch (err) {
+            alert('Ошибка. Попробуйте позже.');
+        } finally {
+            btn.disabled = false;
+            btn.textContent = originalText;
+        }
+    });
 
     document.querySelectorAll('.login-theme-pill').forEach(btn => {
         btn.addEventListener('click', (e) => {
@@ -527,8 +649,8 @@ async function handleLogin(e) {
     submitBtn.style.opacity = 0.7;
     submitBtn.textContent = "Вход...";
 
-    const chat_id  = document.getElementById("chat_id").value.trim();
-    const password = document.getElementById("password").value.trim();
+    const chat_id  = document.getElementById("login_id").value.trim();
+    const password = document.getElementById("login_password").value.trim();
 
     if (!chat_id || !password) {
         alert("Пожалуйста, заполните все поля.");
