@@ -82,7 +82,7 @@ async function resolveRecipients(recipients) {
   });
 }
 
-router.get('/tests/results', verifySession, requireRole('admin', 'manager'), async (req, res) => {
+router.get('/tests/results', verifySession, requireRole('admin', 'hr'), async (req, res) => {
   try {
     const { data: answers, error } = await supabase
       .from('test_answers')
@@ -150,7 +150,7 @@ router.get('/tests/list', verifySession, async (req, res) => {
   }
 });
 
-router.post('/tests/create', verifySession, requireRole('admin', 'manager'), async (req, res) => {
+router.post('/tests/create', verifySession, requireRole('admin', 'hr'), async (req, res) => {
   try {
     const { title, body, questions, test_type, manager_chat_id, test_settings, images, recipients, send_notifications = true } = req.body;
 
@@ -193,7 +193,7 @@ router.post('/tests/create', verifySession, requireRole('admin', 'manager'), asy
   }
 });
 
-router.post('/tests/upload-image', verifySession, requireRole('admin', 'manager'), supabaseUpload.single('file'), async (req, res) => {
+router.post('/tests/upload-image', verifySession, requireRole('admin', 'hr'), supabaseUpload.single('file'), async (req, res) => {
   try {
     const file = req.file;
     if (!file) {
@@ -228,7 +228,7 @@ router.post('/tests/upload-image', verifySession, requireRole('admin', 'manager'
   }
 });
 
-router.get('/tests/recipients-data', verifySession, requireRole('admin', 'manager'), async (req, res) => {
+router.get('/tests/recipients-data', verifySession, requireRole('admin', 'hr'), async (req, res) => {
   try {
     const { data, error } = await supabase
       .from('users')
@@ -277,7 +277,7 @@ router.get('/tests/:id', verifySession, async (req, res) => {
   }
 });
 
-router.put('/tests/:id', verifySession, requireRole('admin', 'manager'), async (req, res) => {
+router.put('/tests/:id', verifySession, requireRole('admin', 'hr'), async (req, res) => {
   try {
     const { id } = req.params;
     const { title, body, questions, test_type, test_settings, images, recipients, recipients_changed = false, manager_chat_id } = req.body;
@@ -370,7 +370,7 @@ router.put('/tests/:id', verifySession, requireRole('admin', 'manager'), async (
   }
 });
 
-router.delete('/tests/:id', verifySession, requireRole('admin', 'manager'), async (req, res) => {
+router.delete('/tests/:id', verifySession, requireRole('admin', 'hr'), async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -399,7 +399,7 @@ router.delete('/tests/:id', verifySession, requireRole('admin', 'manager'), asyn
   }
 });
 
-router.patch('/tests/:id/status', verifySession, requireRole('admin', 'manager'), async (req, res) => {
+router.patch('/tests/:id/status', verifySession, requireRole('admin', 'hr'), async (req, res) => {
   try {
     const { id } = req.params;
     const { status_active } = req.body;
@@ -470,7 +470,7 @@ router.patch('/tests/:id/status', verifySession, requireRole('admin', 'manager')
   }
 });
 
-router.patch('/tests/answer/:id/status', verifySession, requireRole('admin', 'manager'), async (req, res) => {
+router.patch('/tests/answer/:id/status', verifySession, requireRole('admin', 'hr'), async (req, res) => {
   try {
     const { id } = req.params;
     const { test_status } = req.body;
@@ -504,7 +504,7 @@ router.patch('/tests/answer/:id/status', verifySession, requireRole('admin', 'ma
   }
 });
 
-router.patch('/tests/answer/:id/comment', verifySession, requireRole('admin', 'manager'), async (req, res) => {
+router.patch('/tests/answer/:id/comment', verifySession, requireRole('admin', 'hr'), async (req, res) => {
   try {
     const { id } = req.params;
     const { comment } = req.body;
@@ -531,7 +531,7 @@ router.patch('/tests/answer/:id/comment', verifySession, requireRole('admin', 'm
   }
 });
 
-router.patch('/tests/answer/:id/hide', verifySession, requireRole('admin', 'manager'), async (req, res) => {
+router.patch('/tests/answer/:id/hide', verifySession, requireRole('admin', 'hr'), async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -563,7 +563,7 @@ router.patch('/tests/answer/:id/hide', verifySession, requireRole('admin', 'mana
   }
 });
 
-router.get('/tests/result-detail/:id', verifySession, requireRole('admin', 'manager'), async (req, res) => {
+router.get('/tests/result-detail/:id', verifySession, requireRole('admin', 'hr'), async (req, res) => {
   try {
     const { id } = req.params;
 
