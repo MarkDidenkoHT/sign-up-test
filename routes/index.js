@@ -19,7 +19,6 @@ const protectedRoutes = [
     'aeo_routes',
     'stop_list_routes',
     'car_requests_routes',
-    'fuel_input_routes',
     'module_stats_routes',
     'vacations_routes',
     'timetable_routes',
