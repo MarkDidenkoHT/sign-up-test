@@ -1,4 +1,4 @@
-const supabase = require('../utils/db');
+const supabase = require('./db');
 
 const chatConnections = new Map();
 const moduleConnections = new Set();
