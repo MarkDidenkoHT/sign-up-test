@@ -140,19 +140,72 @@ router.post('/vacations/save', requireRole(...VACATION_ROLES), async (req, res, 
 
 router.get('/vacations/requests', requireRole(...VACATION_ROLES), async (req, res, next) => {
     try {
-        const url = `${process.env.SUPABASE_MAIN_URL}/functions/v1/vacation-requests`;
+        const calculateDays = (a, b) => {
+            const start = new Date(a);
+            const end = new Date(b);
+            let count = 0;
+            while (start <= end) { count++; start.setDate(start.getDate() + 1); }
+            return count;
+        };
 
-        const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_KEY}`,
-                'apikey': process.env.SUPABASE_SERVICE_KEY,
-                'Content-Type': 'application/json'
-            }
-        });
+        const calculateFraction = (from, to) => {
+            if (from === '09:00' && to === '18:00') return 1;
+            const [fh, fm] = from.split(':').map(Number);
+            const [th, tm] = to.split(':').map(Number);
+            const hours = th + tm / 60 - (fh + fm / 60);
+            return Math.max(0.1, hours / 9);
+        };
 
-        const data = await response.json();
-        res.status(response.ok ? 200 : 500).json(data);
+        const [reqInfo, reqDates, users] = await Promise.all([
+            supabase.from('requests_info').select('chat_id,request_id,time_from,time_to,status,accountant_notes').eq('request_type', 'vacation').eq('status', 'approved'),
+            supabase.from('requests_dates').select('request_id,date'),
+            supabase.from('users').select('chat_id,user_name,id_1c,vacations_available')
+        ]);
+
+        if (reqInfo.error) throw reqInfo.error;
+        if (reqDates.error) throw reqDates.error;
+        if (users.error) throw users.error;
+
+        const userMap = Object.fromEntries(
+            users.data.map((u) => [
+                u.chat_id,
+                { name: u.user_name, tabNumber: u.id_1c, vacationsAvailable: u.vacations_available }
+            ])
+        );
+
+        const dateMap = {};
+        reqDates.data.forEach((d) => { (dateMap[d.request_id] ||= []).push(d.date); });
+
+        const requests = reqInfo.data.map((r) => {
+            const dates = (dateMap[r.request_id] || []).sort();
+            if (!dates.length) return null;
+            const u = userMap[r.chat_id];
+            if (!u) return null;
+            const start = new Date(dates[0]);
+            const end = new Date(dates[dates.length - 1]);
+            const totalDays = dates.length === 1
+                ? calculateFraction(r.time_from, r.time_to)
+                : calculateDays(dates[0], dates[dates.length - 1]);
+            return {
+                id: r.request_id,
+                request_id: r.request_id,
+                chat_id: r.chat_id,
+                userName: u.name,
+                tabNumber: u.tabNumber,
+                vacations_available: u.vacationsAvailable,
+                startDate: start.toISOString(),
+                endDate: end.toISOString(),
+                totalDays: parseFloat(totalDays.toFixed(2)),
+                comment: r.accountant_notes || '',
+                dates
+            };
+        }).filter(Boolean);
+
+        const years = Array.from(
+            new Set(requests.map((r) => new Date(r.startDate).getFullYear()))
+        ).sort((a, b) => b - a);
+
+        res.json({ success: true, data: { requests, years } });
 
     } catch (err) {
         next(err);
