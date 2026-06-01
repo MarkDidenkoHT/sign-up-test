@@ -10,7 +10,7 @@ const cookieParser = require('cookie-parser');
 const crypto = require('crypto');
 const fs = require('fs');
 const nodemailer = require('nodemailer');
-const { createClient } = require('@supabase/supabase-js');
+const supabase = require('./utils/db');
 const { notifyError, createErrorHandler } = require('./utils/errorNotifier');
 const { initRealtime } = require('./utils/realtime');
 const { initCron, shutdownCron } = require('./utils/cron/cron-index');
@@ -21,11 +21,6 @@ const app = express();
 app.set('trust proxy', 1);
 const PORT = process.env.PORT || 3000;
 const upload = multer();
-
-const supabase = createClient(
-  process.env.SUPABASE_MAIN_URL,
-  process.env.SUPABASE_SERVICE_KEY
-);
 
 const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_EXPIRES_IN = '9h';

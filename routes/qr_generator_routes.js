@@ -2,12 +2,7 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const crypto = require('crypto');
-const { createClient } = require('@supabase/supabase-js');
-
-const supabase = createClient(
-    process.env.SUPABASE_MAIN_URL,
-    process.env.SUPABASE_SERVICE_KEY
-);
+const supabase = require('../utils/db');
 
 const ALLOWED_IMAGE_SIGNATURES = [
     { mime: 'image/jpeg', ext: 'jpg',  bytes: [0xFF, 0xD8, 0xFF] },

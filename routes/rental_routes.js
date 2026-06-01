@@ -1,14 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const { createClient } = require('@supabase/supabase-js');
+const supabase = require('../utils/db');
 const { requireRole } = require('../middleware/auth');
 const multer = require('multer');
 const crypto = require('crypto');
-
-const supabase = createClient(
-  process.env.SUPABASE_MAIN_URL,
-  process.env.SUPABASE_SERVICE_KEY
-);
 
 const RENTAL_ROLES = ['admin', 'hr', 'accountant', 'revisor'];
 

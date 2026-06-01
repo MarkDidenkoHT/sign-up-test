@@ -1,12 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { createClient } = require('@supabase/supabase-js');
+const supabase = require('../utils/db');
 const { verifySession, requireRole } = require('../middleware/auth');
-
-const supabase = createClient(
-    process.env.SUPABASE_MAIN_URL,
-    process.env.SUPABASE_SERVICE_KEY
-);
 
 async function fetchProductData(itemCode, retries = 2) {
     for (let attempt = 1; attempt <= retries; attempt++) {

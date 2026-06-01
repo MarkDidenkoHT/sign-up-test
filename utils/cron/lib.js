@@ -1,6 +1,6 @@
 'use strict';
 
-const { createClient } = require('@supabase/supabase-js');
+const supabase = require('../utils/db');
 
 function getSupabase() {
   return createClient(

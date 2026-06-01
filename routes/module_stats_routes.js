@@ -1,13 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const { createClient } = require('@supabase/supabase-js');
+const supabase = require('../utils/db');
 const { registerModuleConnection } = require('../utils/realtime');
 const { notifyError } = require('../utils/errorNotifier');
-
-const supabase = createClient(
-  process.env.SUPABASE_MAIN_URL,
-  process.env.SUPABASE_SERVICE_KEY
-);
 
 const ADMIN_CHAT_ID = process.env.ADMIN_CHAT_ID;
 

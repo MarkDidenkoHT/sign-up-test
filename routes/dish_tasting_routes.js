@@ -1,12 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { createClient } = require('@supabase/supabase-js');
+const supabase = require('../utils/db');
 const { notifyError } = require('../utils/errorNotifier');
-
-const supabase = createClient(
-    process.env.SUPABASE_MAIN_URL,
-    process.env.SUPABASE_SERVICE_KEY
-);
 
 router.get('/get-current-tasting-menu', async (req, res) => {
     try {

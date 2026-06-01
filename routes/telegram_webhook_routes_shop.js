@@ -4,7 +4,7 @@ const express = require('express');
 const router = express.Router();
 const crypto = require('crypto');
 const rateLimit = require('express-rate-limit');
-const { createClient } = require('@supabase/supabase-js');
+const supabase = require('../utils/db');
 
 function getSupabase() {
   return createClient(

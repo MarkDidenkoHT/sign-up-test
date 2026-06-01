@@ -1,13 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const { createClient } = require('@supabase/supabase-js');
+const supabase = require('../utils/db');
 const { notifyError } = require('../utils/errorNotifier');
 const { requireRole } = require('../middleware/auth');
-
-const supabase = createClient(
-  process.env.SUPABASE_MAIN_URL,
-  process.env.SUPABASE_SERVICE_KEY
-);
 
 const IMAGE_CHECKER_ROLES = ['admin', 'content', 'marketing', 'category_manager'];
 

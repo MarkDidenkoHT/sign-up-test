@@ -1,11 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { createClient } = require('@supabase/supabase-js');
-
-const supabase = createClient(
-  process.env.SUPABASE_MAIN_URL,
-  process.env.SUPABASE_SERVICE_KEY
-);
+const supabase = require('../utils/db');
 
 router.get('/stock-notifications', async (req, res, next) => {
   try {

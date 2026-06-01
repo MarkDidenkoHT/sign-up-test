@@ -4,13 +4,8 @@ const express = require('express');
 const router = express.Router();
 const crypto = require('crypto');
 const rateLimit = require('express-rate-limit');
-const { createClient } = require('@supabase/supabase-js');
+const supabase = require('../utils/db');
 const { hashPassword } = require('../utils/password');
-
-const supabase = createClient(
-    process.env.SUPABASE_MAIN_URL,
-    process.env.SUPABASE_SERVICE_KEY
-);
 
 const SHOP_ROLES = ['shop', 'shop_director'];
 

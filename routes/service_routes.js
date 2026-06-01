@@ -1,14 +1,9 @@
 const express = require('express');
 const multer = require('multer');
 const crypto = require('crypto');
-const { createClient } = require('@supabase/supabase-js');
+const supabase = require('../utils/db');
 const { requireRole } = require('../middleware/auth');
 const router = express.Router();
-
-const supabase = createClient(
-  process.env.SUPABASE_MAIN_URL,
-  process.env.SUPABASE_SERVICE_KEY
-);
 
 const TELEGRAM_SENDER_URL = process.env.BOT_API_URL;
 const TELEGRAM_SHOP_URL = process.env.BOT_API_URL_FOR_SHOP;
