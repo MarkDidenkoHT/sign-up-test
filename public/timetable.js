@@ -354,7 +354,7 @@ export async function loadModule(container, { chatId, userData }) {
 
   const notifyManager = async (data) => {
     try {
-      const response = await fetch('/api/notify-manager', {
+      const response = await fetch('/api/timetable/notify-manager', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ data, userData, chatId })
@@ -367,7 +367,7 @@ export async function loadModule(container, { chatId, userData }) {
 
   const updateManagerMessage = async (messageId, data) => {
     try {
-      const response = await fetch('/api/update-manager-message', {
+      const response = await fetch('/api/timetable/update-manager-message', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ messageId, data, userData, chatId })
@@ -380,7 +380,7 @@ export async function loadModule(container, { chatId, userData }) {
 
   const deleteManagerMessage = async (messageId) => {
     try {
-      const response = await fetch('/api/delete-manager-message', {
+      const response = await fetch('/api/timetable/delete-manager-message', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ messageId, chatId })
@@ -394,7 +394,7 @@ export async function loadModule(container, { chatId, userData }) {
   const loadApprovedRequests = async () => {
     if (isRestricted) return;
     try {
-      const res = await fetch(`/api/user-history/${chatId}`);
+      const res = await fetch(`/api/timetable/user-history/${chatId}`);
       const result = await res.json();
       if (result.success && result.requests) {
         const approvedMap = {};
@@ -826,7 +826,7 @@ export async function loadModule(container, { chatId, userData }) {
         status: 'new',
       };
       try {
-        const infoResponse = await fetch('/api/create-request-info', {
+        const infoResponse = await fetch('/api/timetable/create-request-info', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ requestInfoPayload: payload })
@@ -835,7 +835,7 @@ export async function loadModule(container, { chatId, userData }) {
         const infoResult = await infoResponse.json();
         const recordId = infoResult.data?.[0]?.id;
         await Promise.all(state.selectedDates.map(d =>
-          fetch('/api/create-request-date', {
+          fetch('/api/timetable/create-request-date', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ requestId, date: d })
@@ -851,7 +851,7 @@ export async function loadModule(container, { chatId, userData }) {
           dates: state.selectedDates
         });
         if (!notificationResult.success) throw new Error('Не удалось уведомить менеджера');
-        await fetch('/api/update-request-message', {
+        await fetch('/api/timetable/update-request-message', {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ requestId, messageId: notificationResult.messageId })
@@ -900,18 +900,18 @@ export async function loadModule(container, { chatId, userData }) {
         time_to: to
       };
       try {
-        await fetch('/api/update-request-info', {
+        await fetch('/api/timetable/update-request-info', {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ requestId, payload })
         });
-        await fetch('/api/delete-request-dates', {
+        await fetch('/api/timetable/delete-request-dates', {
           method: 'DELETE',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ requestId })
         });
         await Promise.all(state.editSelectedDates.map(d =>
-          fetch('/api/add-request-date', {
+          fetch('/api/timetable/add-request-date', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ requestId, date: d })
@@ -948,7 +948,7 @@ export async function loadModule(container, { chatId, userData }) {
     const historyList = $('historyList');
     historyList.innerHTML = '<div class="tt-empty">⏳ Загрузка...</div>';
     try {
-      const res = await fetch(`/api/user-history/${chatId}`);
+      const res = await fetch(`/api/timetable/user-history/${chatId}`);
       const result = await res.json();
       if (!res.ok || !result.success) throw new Error(result.error || "Ошибка API");
       state.userRequests = result.requests || [];
@@ -1080,12 +1080,12 @@ export async function loadModule(container, { chatId, userData }) {
     closeModal('deleteModal');
     try {
       if (messageId) await deleteManagerMessage(messageId);
-      await fetch('/api/delete-request-dates', {
+      await fetch('/api/timetable/delete-request-dates', {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ requestId })
       });
-      await fetch('/api/delete-request-info', {
+      await fetch('/api/timetable/delete-request-info', {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ requestId })

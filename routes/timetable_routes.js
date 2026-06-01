@@ -29,7 +29,7 @@ function isValidDate(val) {
     return typeof val === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(val);
 }
 
-router.post('/notify-manager', async (req, res, next) => {
+router.post('/timetable/notify-manager', async (req, res, next) => {
     try {
         const { data, userData, chatId } = req.body;
         const sessionChatId = req.session.user_chat_id;
@@ -87,7 +87,7 @@ router.post('/notify-manager', async (req, res, next) => {
     }
 });
 
-router.post('/update-manager-message', async (req, res, next) => {
+router.post('/timetable/update-manager-message', async (req, res, next) => {
     try {
         const { messageId, data, userData, chatId } = req.body;
         const sessionChatId = req.session.user_chat_id;
@@ -145,7 +145,7 @@ router.post('/update-manager-message', async (req, res, next) => {
     }
 });
 
-router.post('/delete-manager-message', async (req, res, next) => {
+router.post('/timetable/delete-manager-message', async (req, res, next) => {
     try {
         const { messageId, chatId } = req.body;
         const sessionChatId = req.session.user_chat_id;
@@ -172,7 +172,7 @@ router.post('/delete-manager-message', async (req, res, next) => {
     }
 });
 
-router.post('/create-request-info', async (req, res, next) => {
+router.post('/timetable/create-request-info', async (req, res, next) => {
     try {
         const { requestInfoPayload } = req.body;
         const sessionChatId = req.session.user_chat_id;
@@ -205,7 +205,7 @@ router.post('/create-request-info', async (req, res, next) => {
     }
 });
 
-router.get('/user-history/:chatId', async (req, res, next) => {
+router.get('/timetable/user-history/:chatId', async (req, res, next) => {
     try {
         const sessionChatId = req.session.user_chat_id;
 
@@ -247,7 +247,7 @@ router.get('/user-history/:chatId', async (req, res, next) => {
     }
 });
 
-router.post('/create-request-date', async (req, res, next) => {
+router.post('/timetable/create-request-date', async (req, res, next) => {
     try {
         const { requestId, date } = req.body;
 
@@ -276,7 +276,7 @@ router.post('/create-request-date', async (req, res, next) => {
     }
 });
 
-router.patch('/update-request-message', async (req, res, next) => {
+router.patch('/timetable/update-request-message', async (req, res, next) => {
     try {
         const { requestId, messageId } = req.body;
 
@@ -305,7 +305,7 @@ router.patch('/update-request-message', async (req, res, next) => {
     }
 });
 
-router.patch('/update-request-info', async (req, res, next) => {
+router.patch('/timetable/update-request-info', async (req, res, next) => {
     try {
         const { requestId, payload } = req.body;
 
@@ -340,7 +340,7 @@ router.patch('/update-request-info', async (req, res, next) => {
     }
 });
 
-router.delete('/delete-request-dates', async (req, res, next) => {
+router.delete('/timetable/delete-request-dates', async (req, res, next) => {
     try {
         const { requestId } = req.body;
 
@@ -369,7 +369,7 @@ router.delete('/delete-request-dates', async (req, res, next) => {
     }
 });
 
-router.post('/add-request-date', async (req, res, next) => {
+router.post('/timetable/add-request-date', async (req, res, next) => {
     try {
         const { requestId, date } = req.body;
 
@@ -398,7 +398,7 @@ router.post('/add-request-date', async (req, res, next) => {
     }
 });
 
-router.post('/delete-telegram-message', async (req, res, next) => {
+router.post('/timetable/delete-telegram-message', async (req, res, next) => {
     try {
         const { chatId, messageId } = req.body;
 
@@ -431,7 +431,7 @@ router.post('/delete-telegram-message', async (req, res, next) => {
     }
 });
 
-router.delete('/delete-request-info', async (req, res, next) => {
+router.delete('/timetable/delete-request-info', async (req, res, next) => {
     try {
         const { requestId } = req.body;
 
@@ -460,7 +460,7 @@ router.delete('/delete-request-info', async (req, res, next) => {
     }
 });
 
-router.get('/attendance-data', async (req, res, next) => {
+router.get('/timetable/attendance-data', async (req, res, next) => {
     try {
         const sessionChatId = req.session.user_chat_id;
         
