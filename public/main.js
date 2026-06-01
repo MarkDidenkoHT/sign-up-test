@@ -462,7 +462,6 @@ function showLoginForm() {
                     <div id="loginView">
                         <form id="loginForm" class="login-form">
                             <div class="login-form-group">
-                                <label for="login_id" class="login-label">Логин</label>
                                 <input
                                     type="text"
                                     id="login_id"
@@ -475,7 +474,6 @@ function showLoginForm() {
                             </div>
 
                             <div class="login-form-group">
-                                <label for="login_password" class="login-label">Пароль</label>
                                 <input
                                     type="password"
                                     id="login_password"
@@ -501,7 +499,6 @@ function showLoginForm() {
                         <p class="login-reset-hint">Введите ваш логин. Мы отправим код подтверждения в Telegram.</p>
                         <form id="resetStep1Form" class="login-form">
                             <div class="login-form-group">
-                                <label for="reset_login_id" class="login-label">Логин</label>
                                 <input
                                     type="text"
                                     id="reset_login_id"
@@ -523,7 +520,6 @@ function showLoginForm() {
                         <p class="login-reset-hint">Введите код подтверждения, который пришёл вам в Telegram.</p>
                         <form id="resetStep2Form" class="login-form">
                             <div class="login-form-group">
-                                <label for="reset_code" class="login-label">Код подтверждения</label>
                                 <input
                                     type="text"
                                     id="reset_code"
