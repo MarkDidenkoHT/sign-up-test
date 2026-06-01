@@ -148,10 +148,15 @@ router.get('/vacations/requests', requireRole(...VACATION_ROLES), async (req, re
             return count;
         };
 
+        const normalizeTime = (t) => t ? t.substring(0, 5) : null;
+
         const calculateFraction = (from, to) => {
-            if (from === '09:00' && to === '18:00') return 1;
-            const [fh, fm] = from.split(':').map(Number);
-            const [th, tm] = to.split(':').map(Number);
+            const f = normalizeTime(from);
+            const t = normalizeTime(to);
+            if (!f || !t) return 1;
+            if (f === '09:00' && t === '18:00') return 1;
+            const [fh, fm] = f.split(':').map(Number);
+            const [th, tm] = t.split(':').map(Number);
             const hours = th + tm / 60 - (fh + fm / 60);
             return Math.max(0.1, hours / 9);
         };
