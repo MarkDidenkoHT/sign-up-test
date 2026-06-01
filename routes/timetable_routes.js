@@ -491,7 +491,7 @@ router.get('/timetable/attendance-data', async (req, res, next) => {
             return json;
         };
 
-        const userUrl = `${base}/users?select=id_1c,chat_id,user_name,time_arrive,time_leave,notify_violations,user_department&chat_id=eq.${sessionChatId}`;
+        const userUrl = `${base}/users?select=id_1c,chat_id,user_name,time_arrive,time_leave,notify_violations,user_department,vacations_available&chat_id=eq.${sessionChatId}`;
         const users = await pull(userUrl);
 
         if (!users || users.length === 0) {

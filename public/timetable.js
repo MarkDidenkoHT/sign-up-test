@@ -592,61 +592,62 @@ export async function loadModule(container, { chatId, userData }) {
 
   const loadMainData = async () => {
     if (!state.isMainRendered) {
-      $('mainContainer').innerHTML = '<div class="tt-empty">⏳ Загрузка...</div>';
+        $('mainContainer').innerHTML = '<div class="tt-empty">⏳ Загрузка...</div>';
     } else if (!isRestricted) {
-      setCalendarLoading(true);
+        setCalendarLoading(true);
     }
 
     try {
-      const year = state.currentYear;
-      const month = String(state.currentMonth + 1).padStart(2, '0');
-      const url = `/api/timetable/attendance-data?year=${year}&month=${month}`;
-      const resp = await fetch(url);
-      const payload = await resp.json();
+        const year = state.currentYear;
+        const month = String(state.currentMonth + 1).padStart(2, '0');
+        const url = `/api/timetable/attendance-data?year=${year}&month=${month}`;
+        const resp = await fetch(url);
+        const payload = await resp.json();
 
-      if (payload.users) {
-        const currentUser = payload.users[0];
-        if (currentUser) {
-          state.userId = currentUser.id_1c;
-          state.userSchedule = { time_arrive: currentUser.time_arrive, time_leave: currentUser.time_leave };
+        if (payload.users) {
+            const currentUser = payload.users[0];
+            if (currentUser) {
+                state.userId = currentUser.id_1c;
+                state.userSchedule = { time_arrive: currentUser.time_arrive, time_leave: currentUser.time_leave };
+                state.vacationDays = parseFloat(currentUser.vacations_available || 0);
+            }
         }
-      }
 
-      if (payload.schedule && state.userId) {
-        const userScheduleData = payload.schedule.find(s => s.id_1c === state.userId);
-        if (userScheduleData && userScheduleData.work_days) {
-          state.workDays = userScheduleData.work_days;
+        if (payload.schedule && state.userId) {
+            const userScheduleData = payload.schedule.find(s => s.id_1c === state.userId);
+            if (userScheduleData && userScheduleData.work_days) {
+                state.workDays = userScheduleData.work_days;
+            }
         }
-      }
 
-      if (!isRestricted && payload.hikvision && state.userId) {
-        state.attendanceData = payload.hikvision;
-      }
+        if (!isRestricted && payload.hikvision && state.userId) {
+            state.attendanceData = payload.hikvision;
+        }
 
-      if (!isRestricted) {
-        await loadApprovedRequests();
-      }
+        if (!isRestricted) {
+            await loadApprovedRequests();
+        }
 
-      if (!state.isMainRendered) {
-        renderMain();
-        state.isMainRendered = true;
-      } else {
-        const monthNames = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
-        const labelEl = document.querySelector('.tt-current-month');
-        if (labelEl) labelEl.textContent = `${monthNames[state.currentMonth]} ${state.currentYear}`;
-        const grid = document.querySelector('.tt-days-grid');
-        if (grid) { grid.innerHTML = buildGridHTML(); if (!isRestricted) attachGridListeners(); }
-        if (!isRestricted) setCalendarLoading(false);
-      }
+        if (!state.isMainRendered) {
+            renderMain();
+            state.isMainRendered = true;
+        } else {
+            const monthNames = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
+            const labelEl = document.querySelector('.tt-current-month');
+            if (labelEl) labelEl.textContent = `${monthNames[state.currentMonth]} ${state.currentYear}`;
+            const grid = document.querySelector('.tt-days-grid');
+            if (grid) { grid.innerHTML = buildGridHTML(); if (!isRestricted) attachGridListeners(); }
+            if (!isRestricted) setCalendarLoading(false);
+        }
     } catch (e) {
-      if (!state.isMainRendered) {
-        $('mainContainer').innerHTML = '<div class="tt-empty">⚠️ Ошибка загрузки</div>';
-      } else {
-        if (!isRestricted) setCalendarLoading(false);
-        showToast('Ошибка загрузки данных', 'err');
-      }
+        if (!state.isMainRendered) {
+            $('mainContainer').innerHTML = '<div class="tt-empty">⚠️ Ошибка загрузки</div>';
+        } else {
+            if (!isRestricted) setCalendarLoading(false);
+            showToast('Ошибка загрузки данных', 'err');
+        }
     }
-  };
+};
 
   const renderMain = () => {
     const mainContainer = $('mainContainer');
