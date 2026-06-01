@@ -10,6 +10,7 @@ const jobs = [
   require('./jobs/notifyViolations'),
   require('./jobs/checkProductImages'),
   require('./jobs/checkStockNotifications'),
+  require('./jobs/processAiReviews'),
 ];
 
 const _tasks = [];
