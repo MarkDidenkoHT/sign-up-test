@@ -941,6 +941,16 @@ body {
   margin-bottom: 20px;
   line-height: 1.5;
 }
+
+.login-bot-hint {
+  font-size: 13px;
+  color: var(--theme-text-muted);
+  text-align: center;
+  margin-top: 16px;
+  line-height: 1.5;
+  opacity: 0.8;
+}
+
 .main-app-controls-container {
   display: flex;
   justify-content: center;

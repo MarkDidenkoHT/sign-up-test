@@ -493,6 +493,10 @@ function showLoginForm() {
                         <div class="login-forgot-link">
                             <button type="button" id="forgotPasswordBtn" class="login-link-btn">Забыли пароль?</button>
                         </div>
+
+                        <div class="login-bot-hint">
+                            Не знаете логин? Отправьте команду /start корпоративному боту — он пришлёт инструкции.
+                        </div>
                     </div>
 
                     <div id="resetStep1View" style="display:none;">
