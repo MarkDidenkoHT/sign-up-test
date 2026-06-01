@@ -1,0 +1,44 @@
+<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" width="300" height="300" style="margin: auto;">
+  <defs>
+    <linearGradient id="lg1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1C8437">
+        <animate attributeName="stop-color" values="#1C8437;#2ECC40;#39FF14;#1C8437" dur="2.4s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="50%" stop-color="#2ECC40">
+        <animate attributeName="stop-color" values="#2ECC40;#39FF14;#2ECC40;#1C8437;#2ECC40" dur="2.4s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="100%" stop-color="#1C8437">
+        <animate attributeName="stop-color" values="#1C8437;#2ECC40;#1C8437" dur="2.4s" repeatCount="indefinite"/>
+      </stop>
+    </linearGradient>
+
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+
+    <clipPath id="clip1">
+      <rect width="132" height="132" fill="white"/>
+    </clipPath>
+  </defs>
+
+  <g transform="translate(84, 84)" style="fill:rgb(0, 0, 0);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">
+    <g clip-path="url(#clip1)" style="fill:rgb(0, 0, 0);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M74.9574 45.6515L89.8784 60.6917L128.708 21.7641L113.787 6.72388L74.9574 45.6515Z" fill="url(#lg1)" filter="url(#glow)" style="stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.769075;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">
+        <animate attributeName="opacity" values="0.7;1;0.7" dur="2.4s" repeatCount="indefinite" style="stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+      </path>
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M105.269 63.9946C105.328 64.7024 105.328 65.3512 105.328 66.059C105.328 88 87.5874 105.812 65.7346 105.812C43.8818 105.812 26.1411 88 26.1411 66.059C26.1411 44.118 43.8818 26.3056 65.7346 26.3056C68.7893 26.3056 71.7893 26.6595 74.6637 27.3083L94.9891 6.9008C86.1775 2.47721 76.2498 0 65.7346 0C29.4308 0 0 29.5496 0 66C0 102.45 29.4308 132 65.7346 132C102.038 132 131.469 102.509 131.469 66.059C131.469 57.6247 129.883 49.5442 127.005 42.1716L105.269 63.9946Z" fill="#4C4D4D" style="fill:rgb(76, 77, 77);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+    </g>
+  </g>
+
+  <circle cx="150" cy="150" r="80" fill="none" stroke="url(#lg1)" stroke-width="3" stroke-linecap="round" stroke-dasharray="80 422" stroke-dashoffset="0" style="fill:none;color:rgb(255, 255, 255);stroke-width:3px;stroke-dasharray:88.9162px, 413.084px;stroke-linecap:round;stroke-linejoin:miter;opacity:0.615125;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">
+    <animateTransform attributeName="transform" type="rotate" from="0 150 150" to="360 150 150" dur="1.6s" repeatCount="indefinite" style="fill:none;color:rgb(255, 255, 255);stroke-width:3px;stroke-dasharray:88.9162px, 413.084px;stroke-linecap:round;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+    <animate attributeName="stroke-dasharray" values="30 472;120 382;30 472" dur="1.6s" repeatCount="indefinite" style="fill:none;color:rgb(255, 255, 255);stroke-width:3px;stroke-dasharray:88.9162px, 413.084px;stroke-linecap:round;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+    <animate attributeName="opacity" values="0.5;1;0.5" dur="2.4s" repeatCount="indefinite" style="fill:none;color:rgb(255, 255, 255);stroke-width:3px;stroke-dasharray:88.9162px, 413.084px;stroke-linecap:round;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  </circle>
+
+  <circle cx="150" cy="150" r="95" fill="none" stroke="#2ECC40" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="40 557" stroke-dashoffset="0" opacity="0.3" style="fill:none;stroke:rgb(46, 204, 64);color:rgb(255, 255, 255);stroke-width:1.5px;stroke-dasharray:40px, 557px;stroke-linecap:round;stroke-linejoin:miter;opacity:0.386375;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">
+    <animateTransform attributeName="transform" type="rotate" from="360 150 150" to="0 150 150" dur="2.8s" repeatCount="indefinite" style="fill:none;stroke:rgb(46, 204, 64);color:rgb(255, 255, 255);stroke-width:1.5px;stroke-dasharray:40px, 557px;stroke-linecap:round;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+    <animate attributeName="opacity" values="0.15;0.4;0.15" dur="2.8s" repeatCount="indefinite" style="fill:none;stroke:rgb(46, 204, 64);color:rgb(255, 255, 255);stroke-width:1.5px;stroke-dasharray:40px, 557px;stroke-linecap:round;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  </circle>
+</svg>

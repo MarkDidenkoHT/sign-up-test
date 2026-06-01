@@ -1,0 +1,439 @@
+    .stoplist-wrapper * {
+      box-sizing: border-box;
+      font-family: 'Golos Text', sans-serif;
+      scrollbar-width: thin;
+      scrollbar-color: var(--mm-border) var(--mm-surface);
+    }
+    
+    .stoplist-wrapper {
+      background: var(--stoplist-bg);
+      color: var(--stoplist-text);
+      min-height: 98vh;
+      padding: 8px;
+    }
+    
+    .stoplist-filter-section {
+      background: var(--stoplist-surface);
+      border: 1px solid var(--stoplist-border);
+      border-radius: var(--stoplist-radius);
+      padding: 16px;
+      max-width: 700px;
+    }
+    
+    .stoplist-filter-row {
+      display: flex;
+      gap: 12px;
+      align-items: flex-end;
+      flex-wrap: wrap;
+    }
+    
+    .stoplist-filter-group {
+      flex: 1;
+      min-width: 180px;
+    }
+    
+    .stoplist-filter-group label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--stoplist-text-muted);
+      margin-bottom: 4px;
+    }
+    
+    .stoplist-date-range {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .stoplist-date-input {
+      flex: 1;
+      background: var(--stoplist-surface2);
+      border: 1px solid var(--stoplist-border);
+      border-radius: var(--stoplist-radius-sm);
+      color: var(--stoplist-text);
+      padding: 8px 10px;
+      font-size: 13px;
+      font-family: 'Golos Text', sans-serif;
+      outline: none;
+      transition: all 0.2s;
+      height: 38px;
+    }
+    
+    .stoplist-date-input:focus {
+      border-color: var(--stoplist-accent);
+      box-shadow: 0 0 0 3px var(--stoplist-accent-glow);
+    }
+    
+    .stoplist-date-separator {
+      color: var(--stoplist-text-muted);
+      font-size: 13px;
+    }
+    
+    .stoplist-apply-btn {
+      background: var(--stoplist-accent);
+      color: white;
+      border: none;
+      border-radius: var(--stoplist-radius-sm);
+      padding: 8px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: 'Golos Text', sans-serif;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+      box-shadow: 0 2px 8px var(--stoplist-accent-glow);
+      height: 38px;
+    }
+    
+    .stoplist-apply-btn:hover {
+      background: #6aa0f9;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(79,142,247,0.3);
+    }
+    
+    .stoplist-apply-btn:active {
+      transform: translateY(0);
+    }
+    
+    .stoplist-stats-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+    }
+    
+    .stoplist-stat-card {
+      background: var(--stoplist-surface);
+      border: 1px solid var(--stoplist-border);
+      border-radius: var(--stoplist-radius);
+      padding: 14px;
+      transition: all 0.2s;
+    }
+    
+    .stoplist-stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      border-color: var(--stoplist-accent);
+    }
+    
+    .stoplist-stat-label {
+      font-size: 12px;
+      color: var(--stoplist-text-muted);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    
+    .stoplist-stat-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--stoplist-text);
+      line-height: 1.2;
+    }
+    
+    .stoplist-stat-value small {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--stoplist-text-muted);
+      margin-left: 4px;
+    }
+    
+    .stoplist-stat-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    
+    .stoplist-stat-dot.play { background: var(--stoplist-green); }
+    .stoplist-stat-dot.stop { background: var(--stoplist-red); }
+    .stoplist-stat-dot.limit { background: var(--stoplist-yellow); }
+    
+    .stoplist-section-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--stoplist-text);
+    }
+    
+    .stoplist-section-title:first-of-type {
+      margin-top: 0;
+    }
+    
+    .stoplist-restaurant-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(260px, 1fr));
+      gap: 16px;
+    }
+    
+    .stoplist-restaurant-card {
+      background: var(--stoplist-surface);
+      border: 2px solid transparent;
+      border-radius: var(--stoplist-radius);
+      overflow: hidden;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    
+    .stoplist-restaurant-card.active {
+      border-color: var(--stoplist-accent);
+      box-shadow: 0 0 0 4px var(--stoplist-accent-glow);
+    }
+    
+    .stoplist-restaurant-card.inactive {
+      opacity: 0.5;
+      filter: grayscale(0.7);
+    }
+    
+    .stoplist-restaurant-header {
+      background: var(--stoplist-surface2);
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--stoplist-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .stoplist-restaurant-header h4 {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--stoplist-text);
+    }
+    
+    .stoplist-restaurant-status {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--stoplist-green);
+    }
+    
+    .stoplist-restaurant-card.inactive .stoplist-restaurant-status {
+      background: var(--stoplist-text-muted);
+    }
+    
+    .stoplist-chart-container {
+      height: 160px;
+      padding: 8px;
+    }
+    
+    .stoplist-summary-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 12px;
+    }
+    
+    .stoplist-summary-card {
+      background: var(--stoplist-surface);
+      border: 2px solid transparent;
+      border-radius: var(--stoplist-radius);
+      padding: 14px;
+      transition: all 0.2s;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .stoplist-summary-card.active {
+      border-color: var(--stoplist-accent);
+      box-shadow: 0 0 0 4px var(--stoplist-accent-glow);
+    }
+    
+    .stoplist-summary-card.inactive {
+      opacity: 0.5;
+      filter: grayscale(0.7);
+    }
+    
+    .stoplist-summary-card h3 {
+      margin: 0;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--stoplist-text);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .stoplist-summary-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--stoplist-text);
+    }
+    
+    .stoplist-table-container {
+      background: var(--stoplist-surface);
+      border: 1px solid var(--stoplist-border);
+      border-radius: var(--stoplist-radius);
+      overflow: auto;
+      max-height: 500px;
+    }
+    
+    .stoplist-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    
+    .stoplist-table th {
+      position: sticky;
+      top: 0;
+      background: var(--stoplist-surface2);
+      color: var(--stoplist-text-muted);
+      font-weight: 600;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 12px 14px;
+      text-align: left;
+      border-bottom: 2px solid var(--stoplist-border);
+      white-space: nowrap;
+    }
+    
+    .stoplist-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--stoplist-border);
+      color: var(--stoplist-text);
+    }
+    
+    .stoplist-table tbody tr:hover {
+      background: rgba(79,142,247,0.04);
+    }
+    
+    .stoplist-status-badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    
+    .stoplist-status-badge.play {
+      background: rgba(34,197,94,0.15);
+      color: var(--stoplist-green);
+      border: 1px solid rgba(34,197,94,0.3);
+    }
+    
+    .stoplist-status-badge.stop {
+      background: rgba(239,68,68,0.15);
+      color: var(--stoplist-red);
+      border: 1px solid rgba(239,68,68,0.3);
+    }
+    
+    .stoplist-status-badge.limit {
+      background: rgba(234,179,8,0.15);
+      color: var(--stoplist-yellow);
+      border: 1px solid rgba(234,179,8,0.3);
+    }
+    
+    .stoplist-comments-cell {
+      max-width: 250px;
+    }
+    
+    .stoplist-comment-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      padding: 4px 0;
+      border-bottom: 1px solid rgba(42,48,72,0.5);
+    }
+    
+    .stoplist-comment-item:last-child {
+      border-bottom: none;
+    }
+    
+    .stoplist-comment-count {
+      background: var(--stoplist-surface2);
+      color: var(--stoplist-accent);
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 4px;
+      border-radius: 10px;
+      white-space: nowrap;
+    }
+    
+    .stoplist-comment-text {
+      color: var(--stoplist-text-muted);
+      font-size: 12px;
+      line-height: 1.4;
+      word-break: break-word;
+    }
+    
+    .stoplist-loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 160px;
+      gap: 6px;
+    }
+    
+    .stoplist-loading span {
+      width: 10px;
+      height: 10px;
+      background: var(--stoplist-accent);
+      border-radius: 50%;
+      animation: stoplist-pulse 1.4s infinite;
+    }
+    
+    .stoplist-loading span:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+    
+    .stoplist-loading span:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+    
+    @keyframes stoplist-pulse {
+      0%, 60%, 100% { transform: scale(0.4); opacity: 0.6; }
+      30% { transform: scale(1); opacity: 1; }
+    }
+    
+    .stoplist-error {
+      background: rgba(239,68,68,0.1);
+      border: 1px solid rgba(239,68,68,0.3);
+      color: var(--stoplist-red);
+      padding: 12px 16px;
+      border-radius: var(--stoplist-radius);
+      margin-bottom: 16px;
+      display: none;
+      font-size: 13px;
+    }
+    
+    @media (max-width: 1200px) {
+      .stoplist-summary-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .stoplist-wrapper {
+        padding: 12px;
+      }
+      
+      .stoplist-summary-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+      }
+      
+      .stoplist-restaurant-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+      
+      .stoplist-filter-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      
+      .stoplist-date-range {
+        flex-wrap: wrap;
+      }
+      
+      .stoplist-stats-cards {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+      }
+    }

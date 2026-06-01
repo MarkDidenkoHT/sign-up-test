@@ -1,0 +1,272 @@
+      .car-fuel-module {
+        padding: 0;
+        margin: 0;
+        font-family: 'Golos Text', sans-serif;
+      }
+      
+      .car-fuel-module * {
+        box-sizing: border-box;
+        font-family: 'Golos Text', sans-serif;
+      }
+      
+      .car-fuel-form-container {
+        padding: 20px;
+        max-width: 500px;
+        margin: 0 auto;
+      }
+      
+      .car-fuel-card {
+        background: var(--cf-surface);
+        border: 1px solid var(--cf-border);
+        border-radius: var(--cf-radius);
+        padding: 24px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      }
+      
+      .car-fuel-label {
+        display: block;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--cf-text-muted);
+        margin-bottom: 8px;
+      }
+      
+      .car-fuel-search-wrapper {
+        position: relative;
+      }
+      
+      .car-fuel-search-input {
+        width: 100%;
+        padding: 12px 16px;
+        background: var(--cf-surface2);
+        border: 1px solid var(--cf-border);
+        border-radius: var(--cf-radius-sm);
+        font-size: 14px;
+        color: var(--cf-text);
+        transition: all 0.2s;
+        box-sizing: border-box;
+        font-family: 'Golos Text', sans-serif;
+      }
+      
+      .car-fuel-search-input:focus {
+        outline: none;
+        border-color: var(--cf-accent);
+        box-shadow: 0 0 0 3px var(--cf-accent-glow);
+      }
+      
+      .car-fuel-search-input:hover:not(:focus) {
+        border-color: var(--cf-accent);
+      }
+
+      .car-fuel-search-input::placeholder {
+        color: var(--cf-text-muted);
+      }
+      
+      .car-fuel-select {
+        width: 100%;
+        padding: 12px 16px;
+        background: var(--cf-surface2);
+        border: 1px solid var(--cf-border);
+        border-radius: var(--cf-radius-sm);
+        font-size: 14px;
+        color: var(--cf-text);
+        transition: all 0.2s;
+        appearance: none;
+        margin-top: 12px;
+        box-sizing: border-box;
+        font-family: 'Golos Text', sans-serif;
+        cursor: pointer;
+      }
+      
+      .car-fuel-select:focus {
+        outline: none;
+        border-color: var(--cf-accent);
+        box-shadow: 0 0 0 3px var(--cf-accent-glow);
+      }
+      
+      .car-fuel-select:hover:not(:focus) {
+        border-color: var(--cf-accent);
+      }
+      
+      .car-fuel-select option {
+        background: var(--cf-surface2);
+        color: var(--cf-text);
+        padding: 8px;
+      }
+      
+      .car-fuel-date-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin: 20px 0;
+      }
+      
+      .car-fuel-input {
+        width: 100%;
+        padding: 12px 16px;
+        background: var(--cf-surface2);
+        border: 1px solid var(--cf-border);
+        border-radius: var(--cf-radius-sm);
+        font-size: 14px;
+        color: var(--cf-text);
+        transition: all 0.2s;
+        box-sizing: border-box;
+        font-family: 'Golos Text', sans-serif;
+      }
+      
+      .car-fuel-input:focus {
+        outline: none;
+        border-color: var(--cf-accent);
+        box-shadow: 0 0 0 3px var(--cf-accent-glow);
+      }
+      
+      .car-fuel-input:hover:not(:focus) {
+        border-color: var(--cf-accent);
+      }
+
+      .car-fuel-input::placeholder {
+        color: var(--cf-text-muted);
+      }
+
+      .car-fuel-input[type="number"]::-webkit-inner-spin-button,
+      .car-fuel-input[type="number"]::-webkit-outer-spin-button {
+        opacity: 0.5;
+        background: var(--cf-surface);
+      }
+      
+      .car-fuel-button {
+        width: 100%;
+        padding: 14px;
+        background: var(--cf-accent);
+        color: #fff;
+        border: none;
+        border-radius: var(--cf-radius);
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        margin-top: 8px;
+        position: relative;
+        overflow: hidden;
+        box-sizing: border-box;
+        font-family: 'Golos Text', sans-serif;
+        box-shadow: 0 2px 10px var(--cf-accent-glow);
+      }
+      
+      .car-fuel-button:hover:not(:disabled) {
+        background: #6aa0f9;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 16px rgba(79,142,247,0.3);
+      }
+      
+      .car-fuel-button:active:not(:disabled) {
+        transform: translateY(0);
+      }
+      
+      .car-fuel-button:disabled {
+        background: var(--cf-surface2);
+        color: var(--cf-text-muted);
+        border: 1px solid var(--cf-border);
+        cursor: not-allowed;
+        transform: none !important;
+        box-shadow: none;
+      }
+      
+      .car-fuel-button-success {
+        background: var(--cf-green);
+        box-shadow: 0 2px 10px rgba(34,197,94,0.2);
+      }
+      
+      .car-fuel-button-success:hover:not(:disabled) {
+        background: #4ade80;
+      }
+      
+      .car-fuel-button-error {
+        background: var(--cf-red);
+        box-shadow: 0 2px 10px rgba(239,68,68,0.2);
+      }
+      
+      .car-fuel-button-error:hover:not(:disabled) {
+        background: #f87171;
+      }
+      
+      .car-fuel-option-hint {
+        font-size: 12px;
+        color: var(--cf-text-muted);
+        margin-top: 6px;
+      }
+      
+      .car-fuel-no-results {
+        padding: 12px;
+        color: var(--cf-text-muted);
+        font-size: 14px;
+        text-align: center;
+      }
+
+      .car-fuel-loading {
+        position: relative;
+        color: transparent !important;
+      }
+      
+      .car-fuel-loading::after {
+        content: '';
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        top: 50%;
+        left: 50%;
+        margin-left: -10px;
+        margin-top: -10px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: white;
+        animation: car-fuel-spin 0.8s linear infinite;
+      }
+
+      .car-fuel-module *::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+
+      .car-fuel-module *::-webkit-scrollbar-track {
+        background: var(--cf-surface);
+        border-radius: 10px;
+      }
+
+      .car-fuel-module *::-webkit-scrollbar-thumb {
+        background: var(--cf-border);
+        border-radius: 10px;
+        border: 2px solid var(--cf-surface);
+      }
+
+      .car-fuel-module *::-webkit-scrollbar-thumb:hover {
+        background: var(--cf-accent);
+      }
+
+      .car-fuel-module * {
+        scrollbar-width: thin;
+        scrollbar-color: var(--cf-border) var(--cf-surface);
+      }
+      
+      @keyframes car-fuel-spin {
+        to { transform: rotate(360deg); }
+      }
+
+      @media (min-width: 768px) {
+        .car-fuel-form-container {
+          max-width: 400px;
+          padding: 20px;
+        }
+        .car-fuel-card {
+          max-width: 400px;
+          margin: 0 auto 20px;
+        }
+        .car-fuel-button {
+          max-width: 400px;
+          margin: 8px auto 0;
+          display: block;
+        }
+      }

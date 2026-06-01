@@ -1,0 +1,747 @@
+    .pricetags-module * {
+      box-sizing: border-box;
+      font-family: 'Golos Text', sans-serif;
+    }
+    
+    .pricetags-module {
+      color: var(--pm-text);
+      background: var(--pm-bg);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      min-height: 98vh;
+    }
+    
+    .pricetags-module .pricetags-top-buttons {
+      background: var(--pm-surface);
+      border: 1px solid var(--pm-border);
+      border-radius: var(--pm-radius);
+      padding: 10px;
+      display: flex;
+      gap: 10px;
+      margin: 8px;
+    }
+    
+    .pricetags-module .pricetags-btn {
+      padding: 9px 18px;
+      border-radius: var(--pm-radius-sm);
+      border: none;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: 'Golos Text', sans-serif;
+      transition: all 0.15s;
+      letter-spacing: 0.02em;
+    }
+    
+    .pricetags-module .pricetags-btn-primary {
+      background: var(--pm-accent);
+      color: #fff;
+      box-shadow: 0 2px 10px var(--pm-accent-glow);
+    }
+    
+    .pricetags-module .pricetags-btn-primary:hover {
+      background: #6aa0f9;
+    }
+    
+    .pricetags-module .pricetags-btn-secondary {
+      background: transparent;
+      color: var(--pm-text-muted);
+      border: 1px solid var(--pm-border);
+    }
+    
+    .pricetags-module .pricetags-btn-secondary:hover {
+      background: var(--pm-surface2);
+      color: var(--pm-text);
+    }
+    
+    .pricetags-module .pricetags-btn-delete {
+      background: rgba(239,68,68,0.15);
+      color: #f87171;
+      border: 1px solid rgba(239,68,68,0.25);
+    }
+    
+    .pricetags-module .pricetags-btn-delete:hover {
+      background: rgba(239,68,68,0.25);
+    }
+    
+    .pricetags-module .pricetags-btn-complete {
+      background: rgba(34,197,94,0.15);
+      color: #4ade80;
+      border: 1px solid rgba(34,197,94,0.25);
+    }
+    
+    .pricetags-module .pricetags-btn-complete:hover {
+      background: rgba(34,197,94,0.25);
+    }
+    
+    .pricetags-module .pricetags-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    .pricetags-module .pricetags-tab-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0 8px;
+    }
+    
+    .pricetags-module .pricetags-section {
+      background: var(--pm-surface);
+      border: 1px solid var(--pm-border);
+      border-radius: var(--pm-radius);
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+    
+    .pricetags-module .pricetags-section h3 {
+      margin: 0 0 16px 0;
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--pm-text);
+    }
+    
+    .pricetags-module .pricetags-section h4 {
+      margin: 0 0 12px 0;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--pm-text);
+    }
+    
+    .pricetags-module .pricetags-status-message {
+      margin: 16px;
+      padding: 12px 18px;
+      border-radius: var(--pm-radius);
+      display: none;
+      animation: slideIn 0.3s ease;
+    }
+    
+    .pricetags-module .pricetags-status-message.success {
+      background: rgba(34,197,94,0.1);
+      border-left: 4px solid var(--pm-green);
+      color: var(--pm-text);
+    }
+    
+    .pricetags-module .pricetags-status-message.error {
+      background: rgba(239,68,68,0.1);
+      border-left: 4px solid var(--pm-red);
+      color: var(--pm-text);
+    }
+    
+    .pricetags-module .pricetags-table-wrap {
+      overflow-x: auto;
+      border-radius: var(--pm-radius-sm);
+      border: 1px solid var(--pm-border);
+      background: var(--pm-surface2);
+    }
+    
+    .pricetags-module .pricetags-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    
+    .pricetags-module .pricetags-table th {
+      background: var(--pm-surface);
+      color: var(--pm-text-muted);
+      font-weight: 600;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 12px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--pm-border);
+      white-space: nowrap;
+    }
+    
+    .pricetags-module .pricetags-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--pm-border);
+      color: var(--pm-text);
+      vertical-align: middle;
+    }
+    
+    .pricetags-module .pricetags-table tbody tr {
+      background: var(--pm-surface2);
+    }
+    
+    .pricetags-module .pricetags-table tbody tr:hover {
+      background: rgba(79,142,247,0.08);
+    }
+    
+    .pricetags-module .pricetags-task-status {
+      padding: 4px 8px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      display: inline-block;
+    }
+    
+    .pricetags-module .pricetags-task-status.new {
+      background: rgba(250,204,21,0.15);
+      color: #fbbf24;
+      border: 1px solid rgba(250,204,21,0.25);
+    }
+    
+    .pricetags-module .pricetags-task-status.completed {
+      background: rgba(34,197,94,0.15);
+      color: #4ade80;
+      border: 1px solid rgba(34,197,94,0.25);
+    }
+    
+    .pricetags-module .pricetags-task-status.cancelled {
+      background: rgba(239,68,68,0.15);
+      color: #f87171;
+      border: 1px solid rgba(239,68,68,0.25);
+    }
+    
+    .pricetags-module .pricetags-task-status.in_progress {
+      background: rgba(59,130,246,0.15);
+      color: #60a5fa;
+      border: 1px solid rgba(59,130,246,0.25);
+    }
+    
+    .pricetags-module .pricetags-task-actions {
+      display: flex;
+      gap: 8px;
+    }
+    
+    .pricetags-module .pricetags-item-code-link {
+      color: var(--pm-accent);
+      text-decoration: underline;
+      cursor: pointer;
+    }
+    
+    .pricetags-module .pricetags-item-code-link:hover {
+      color: #6aa0f9;
+    }
+    
+    .pricetags-module .pricetags-editable-error-type,
+    .pricetags-module .pricetags-editable-item-name {
+      color: var(--pm-accent);
+      text-decoration: underline;
+      cursor: pointer;
+    }
+    
+    .pricetags-module .pricetags-editable-error-type:hover,
+    .pricetags-module .pricetags-editable-item-name:hover {
+      color: #6aa0f9;
+    }
+    
+    .pricetags-module .pricetags-user-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--pm-accent);
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: var(--pm-radius-sm);
+      background: var(--pm-surface);
+      border: 1px solid var(--pm-border);
+    }
+    
+    .pricetags-module .pricetags-user-link:hover {
+      background: var(--pm-surface2);
+    }
+    
+    .pricetags-module .pricetags-user-link .pricetags-send-indicator {
+      width: 20px;
+      height: 20px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      background: var(--pm-accent-glow);
+      color: var(--pm-accent);
+      font-size: 12px;
+    }
+    
+    .pricetags-module .pricetags-user-link.sending {
+      background: linear-gradient(90deg, rgba(79,142,247,0.1), rgba(79,142,247,0.05));
+      box-shadow: 0 0 0 2px var(--pm-accent-glow) inset;
+    }
+    
+    .pricetags-module .pricetags-user-link .pricetags-sent-badge {
+      display: inline-block;
+      margin-left: 6px;
+      padding: 2px 6px;
+      background: var(--pm-green);
+      color: #fff;
+      border-radius: 12px;
+      font-size: 11px;
+      line-height: 1;
+      opacity: 0;
+      transform: translateY(-4px);
+      transition: opacity .25s, transform .25s;
+    }
+    
+    .pricetags-module .pricetags-user-link.show-sent .pricetags-sent-badge {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .pricetags-module .pricetags-loading-message,
+    .pricetags-module .pricetags-no-data-message {
+      padding: 40px 20px;
+      text-align: center;
+      color: var(--pm-text-muted);
+      font-size: 14px;
+    }
+    
+    .pricetags-module .pricetags-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    
+    .pricetags-module .pricetags-stat-card {
+      background: var(--pm-surface2);
+      border: 1px solid var(--pm-border);
+      border-radius: var(--pm-radius);
+      padding: 16px;
+      text-align: center;
+    }
+    
+    .pricetags-module .pricetags-stat-number {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--pm-text);
+      margin-bottom: 6px;
+    }
+    
+    .pricetags-module .pricetags-stat-label {
+      font-size: 13px;
+      color: var(--pm-text-muted);
+    }
+    
+    .pricetags-module .pricetags-chart-container {
+      width: 100%;
+      height: 250px;
+      position: relative;
+      margin-top: 16px;
+    }
+    
+    .pricetags-module .pricetags-chart-canvas {
+      width: 100% !important;
+      height: 100% !important;
+      display: block;
+    }
+    
+    .pricetags-module .pricetags-analytics-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      background: var(--pm-surface);
+      border: 1px solid var(--pm-border);
+      border-radius: var(--pm-radius);
+      padding: 5px;
+    }
+    
+    .pricetags-module .pricetags-analytics-tab-btn {
+      padding: 8px 16px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      background: transparent;
+      color: var(--pm-text-muted);
+      transition: all 0.18s;
+    }
+    
+    .pricetags-module .pricetags-analytics-tab-btn:hover {
+      color: var(--pm-text);
+      background: var(--pm-surface2);
+    }
+    
+    .pricetags-module .pricetags-analytics-tab-btn.active {
+      background: var(--pm-accent);
+      color: #fff;
+      box-shadow: 0 2px 12px var(--pm-accent-glow);
+    }
+    
+    .pricetags-module .pricetags-analytics-chips {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    
+    .pricetags-module .pricetags-chip {
+      background: var(--pm-surface);
+      color: var(--pm-text);
+      padding: 4px 8px;
+      border-radius: 20px;
+      font-size: 11px;
+      border: 1px solid var(--pm-border);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    
+    .pricetags-module .pricetags-chip:hover {
+      background: var(--pm-surface2);
+      color: var(--pm-text);
+      border-color: var(--pm-accent);
+    }
+    
+    .pricetags-module .pricetags-details-btn {
+      background: transparent;
+      border: 1px dashed var(--pm-border);
+      padding: 6px 12px;
+      border-radius: var(--pm-radius-sm);
+      cursor: pointer;
+      color: var(--pm-text-muted);
+      font-size: 12px;
+      transition: all 0.15s;
+    }
+    
+    .pricetags-module .pricetags-details-btn:hover {
+      background: var(--pm-surface);
+      border-color: var(--pm-accent);
+      color: var(--pm-accent);
+    }
+    
+    .pricetags-module .pricetags-analytics-date-controls {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 20px;
+      padding: 16px;
+      background: var(--pm-surface);
+      border: 1px solid var(--pm-border);
+      border-radius: var(--pm-radius);
+    }
+    
+    .pricetags-module .pricetags-analytics-date-controls label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--pm-text);
+    }
+    
+    .pricetags-module .pricetags-analytics-date-controls input {
+      background: var(--pm-surface2);
+      border: 1px solid var(--pm-border);
+      border-radius: var(--pm-radius-sm);
+      color: var(--pm-text);
+      padding: 8px 12px;
+      font-size: 13px;
+      outline: none;
+    }
+    
+    .pricetags-module .pricetags-analytics-date-controls input[type="date"]::-webkit-calendar-picker-indicator {
+      filter: invert(1);
+      opacity: 0.6;
+    }
+    
+    .pricetags-module .pricetags-analytics-date-controls input[type="date"]::-webkit-calendar-picker-indicator:hover {
+      opacity: 1;
+    }
+    
+    .pricetags-module .pricetags-analytics-date-controls input:focus {
+      border-color: var(--pm-accent);
+    }
+    
+    .pricetags-module .pricetags-analytics-date-controls button {
+      padding: 8px 16px;
+      background: var(--pm-accent);
+      color: #fff;
+      border: none;
+      border-radius: var(--pm-radius-sm);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+    }
+    
+    .pricetags-module .pricetags-analytics-date-controls button:hover {
+      background: #6aa0f9;
+    }
+    
+    .pricetags-module .pricetags-modal {
+      position: fixed;
+      z-index: 2000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(3px);
+    }
+    
+    .pricetags-module .pricetags-modal-content {
+      background: var(--pm-surface);
+      border: 1px solid var(--pm-border);
+      border-radius: 14px;
+      padding: 24px;
+      max-width: 1000px;
+      width: 95%;
+      max-height: 80vh;
+      overflow: auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+    
+    .pricetags-module .pricetags-modal-close {
+      float: right;
+      font-size: 24px;
+      cursor: pointer;
+      color: var(--pm-text-muted);
+    }
+    
+    .pricetags-module .pricetags-modal-close:hover {
+      color: var(--pm-text);
+    }
+    
+    .pricetags-chat-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      backdrop-filter: blur(3px);
+    }
+    
+    .pricetags-chat-container {
+      background: var(--pm-surface);
+      border: 1px solid var(--pm-border);
+      border-radius: 14px;
+      width: 90%;
+      max-width: 500px;
+      height: 80%;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+    
+    .pricetags-chat-header {
+      padding: 16px;
+      border-bottom: 1px solid var(--pm-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--pm-surface2);
+      border-radius: 14px 14px 0 0;
+    }
+    
+    .pricetags-chat-user-info h3 {
+      margin: 0;
+      font-size: 16px;
+      color: var(--pm-text);
+    }
+    
+    .pricetags-chat-user-info p {
+      margin: 4px 0 0 0;
+      font-size: 13px;
+      color: var(--pm-text-muted);
+    }
+    
+    .pricetags-chat-close {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: var(--pm-text-muted);
+      padding: 4px;
+    }
+    
+    .pricetags-chat-close:hover {
+      color: var(--pm-text);
+    }
+    
+    .pricetags-chat-controls {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--pm-border);
+      display: flex;
+      gap: 8px;
+      background: var(--pm-surface);
+    }
+    
+    .pricetags-chat-controls button {
+      padding: 6px 12px;
+      background: var(--pm-surface2);
+      border: 1px solid var(--pm-border);
+      border-radius: var(--pm-radius-sm);
+      color: var(--pm-text);
+      cursor: pointer;
+      font-size: 12px;
+    }
+    
+    .pricetags-chat-controls button:hover {
+      background: var(--pm-surface);
+      border-color: var(--pm-accent);
+    }
+    
+    .pricetags-chat-controls input {
+      flex: 1;
+      padding: 6px 12px;
+      background: var(--pm-surface2);
+      border: 1px solid var(--pm-border);
+      border-radius: var(--pm-radius-sm);
+      color: var(--pm-text);
+      font-size: 12px;
+      outline: none;
+    }
+    
+    .pricetags-chat-controls input:focus {
+      border-color: var(--pm-accent);
+    }
+    
+    .pricetags-chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      background: var(--pm-surface2);
+    }
+    
+    .pricetags-message {
+      max-width: 80%;
+      padding: 10px 14px;
+      border-radius: 14px;
+      position: relative;
+      word-wrap: break-word;
+      font-size: 13px;
+    }
+    
+    .pricetags-message-out {
+      align-self: flex-end;
+      background: var(--pm-accent);
+      color: #fff;
+      border-bottom-right-radius: 4px;
+    }
+    
+    .pricetags-message-in {
+      align-self: flex-start;
+      background: var(--pm-surface);
+      color: var(--pm-text);
+      border-bottom-left-radius: 4px;
+    }
+    
+    .pricetags-message-time {
+      font-size: 10px;
+      opacity: 0.7;
+      margin-top: 4px;
+      text-align: right;
+      color: var(--pm-text-muted);
+    }
+    
+    .pricetags-date-divider {
+      text-align: center;
+      margin: 16px 0;
+      position: relative;
+    }
+    
+    .pricetags-date-divider::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: var(--pm-border);
+      z-index: 1;
+    }
+    
+    .pricetags-date-divider span {
+      background: var(--pm-surface);
+      padding: 4px 12px;
+      border-radius: 20px;
+      border: 1px solid var(--pm-border);
+      font-size: 11px;
+      color: var(--pm-text);
+      position: relative;
+      z-index: 2;
+    }
+    
+    .pricetags-chat-input-area {
+      padding: 16px;
+      border-top: 1px solid var(--pm-border);
+      display: flex;
+      gap: 8px;
+      background: var(--pm-surface);
+    }
+    
+    .pricetags-chat-input {
+      flex: 1;
+      padding: 8px 12px;
+      background: var(--pm-surface2);
+      border: 1px solid var(--pm-border);
+      border-radius: var(--pm-radius-sm);
+      color: var(--pm-text);
+      resize: none;
+      height: 40px;
+      font-family: 'Golos Text', sans-serif;
+      font-size: 13px;
+      outline: none;
+    }
+    
+    .pricetags-chat-input:focus {
+      border-color: var(--pm-accent);
+    }
+    
+    .pricetags-chat-send {
+      padding: 8px 16px;
+      background: var(--pm-accent);
+      color: #fff;
+      border: none;
+      border-radius: var(--pm-radius-sm);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+    }
+    
+    .pricetags-chat-send:hover {
+      background: #6aa0f9;
+    }
+    
+    .pricetags-chat-send:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    .pricetags-search-results {
+      background: var(--pm-surface);
+      border: 1px solid var(--pm-yellow);
+      border-radius: var(--pm-radius-sm);
+      padding: 8px 12px;
+      margin-bottom: 12px;
+      font-size: 12px;
+      color: var(--pm-text);
+    }
+    
+    .pricetags-module select,
+    .pricetags-module input[type="date"],
+    .pricetags-module input[type="text"] {
+      background: var(--pm-surface2);
+      border: 1px solid var(--pm-border);
+      border-radius: var(--pm-radius-sm);
+      color: var(--pm-text);
+      padding: 8px 12px;
+      font-size: 13px;
+      outline: none;
+    }
+    
+    .pricetags-module select option {
+      background: var(--pm-surface2);
+      color: var(--pm-text);
+    }
+    
+    @keyframes slideIn {
+      from {
+        transform: translateY(-20px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
