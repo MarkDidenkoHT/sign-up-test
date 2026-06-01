@@ -3,6 +3,9 @@ const router = express.Router();
 const axios = require('axios');
 const { supabase, registerChatConnection } = require('../utils/realtime');
 const { notifyError } = require('../utils/errorNotifier');
+const { requireRole } = require('../middleware/auth');
+
+const PRICETAG_ROLES = ['admin', 'content'];
 
 const WAREHOUSE_ID_TO_CODE = {
   '30': 'ТЦТ',
@@ -88,10 +91,26 @@ router.post('/all-pending-price-tags', async (req, res, next) => {
   }
 });
 
-router.post('/send-telegram-message', async (req, res, next) => {
+router.post('/send-telegram-message', requireRole(...PRICETAG_ROLES), async (req, res, next) => {
   const { chatId, text, recordId } = req.body;
+
+  if (!chatId || !/^\d{1,20}$/.test(String(chatId))) {
+    return res.status(400).json({ success: false, error: 'Invalid chatId' });
+  }
+  if (!text || typeof text !== 'string' || text.trim().length === 0 || text.length > 4000) {
+    return res.status(400).json({ success: false, error: 'Invalid text' });
+  }
+  if (!recordId || !/^[\w\-]{1,100}$/.test(String(recordId))) {
+    return res.status(400).json({ success: false, error: 'Invalid recordId' });
+  }
+
+  const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN_FOR_CONTENT;
+  if (!BOT_TOKEN) {
+    return res.status(500).json({ success: false, error: 'Bot token not configured' });
+  }
+
   try {
-    await fetch(`https://api.telegram.org/bot7444441769:AAGhmsL_2-rMeNtJNzlf407OPAKjTrcgZiM/sendMessage`, {
+    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

@@ -1,8 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const { notifyError } = require('../utils/errorNotifier');
+const { requireRole } = require('../middleware/auth');
 
-router.post('/mistral/generate', async (req, res) => {
+const AEO_ROLES = ['admin', 'content'];
+
+router.post('/mistral/generate', requireRole(...AEO_ROLES), async (req, res) => {
     const { messages, max_tokens = 1000, use_secondary_key = false } = req.body;
 
     if (!messages || !Array.isArray(messages)) {
@@ -53,7 +56,7 @@ router.post('/mistral/generate', async (req, res) => {
     }
 });
 
-router.post('/gemma/generate', async (req, res) => {
+router.post('/gemma/generate', requireRole(...AEO_ROLES), async (req, res) => {
     const { messages, max_tokens = 1000 } = req.body;
 
     if (!messages || !Array.isArray(messages)) {
