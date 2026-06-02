@@ -685,6 +685,14 @@ export async function loadModule(container, { chatId, userData }) {
     }
   };
 
+  const scrollToComment = () => {
+    const textarea = $('comment');
+    if (textarea) {
+      textarea.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      textarea.focus();
+    }
+  };
+
   const renderMain = () => {
     const mainContainer = $('mainContainer');
 
@@ -914,6 +922,15 @@ export async function loadModule(container, { chatId, userData }) {
     $('timeTo')?.addEventListener('input', checkTypeOptions);
     $('editTimeFrom')?.addEventListener('input', checkEditTypeOptions);
     $('editTimeTo')?.addEventListener('input', checkEditTypeOptions);
+
+    const comment = $('comment');
+    if (comment) {
+      comment.addEventListener('focus', () => {
+        setTimeout(() => {
+          scrollToComment();
+        }, 100);
+      });
+    }
 
     const mainScroll = document.querySelector('.tt-main-scroll');
     if (mainScroll) {
