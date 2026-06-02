@@ -687,9 +687,18 @@ export async function loadModule(container, { chatId, userData }) {
 
   const scrollToComment = () => {
     const textarea = $('comment');
-    if (textarea) {
-      textarea.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      textarea.focus();
+    const textareaParent = textarea?.closest('.tt-textarea');
+    const scrollContainer = document.querySelector('.tt-main-scroll');
+    
+    if (textarea && scrollContainer) {
+      const textareaRect = textareaParent?.getBoundingClientRect();
+      const scrollRect = scrollContainer.getBoundingClientRect();
+      
+      if (textareaRect && textareaRect.bottom > scrollRect.bottom) {
+        textareaParent.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else {
+        textareaParent.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     }
   };
 
@@ -928,7 +937,12 @@ export async function loadModule(container, { chatId, userData }) {
       comment.addEventListener('focus', () => {
         setTimeout(() => {
           scrollToComment();
-        }, 100);
+        }, 300);
+      });
+      comment.addEventListener('click', () => {
+        setTimeout(() => {
+          scrollToComment();
+        }, 300);
       });
     }
 
