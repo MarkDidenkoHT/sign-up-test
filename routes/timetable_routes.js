@@ -4,12 +4,11 @@ const supabase = require('../utils/db');
 
 const ALLOWED_REQUEST_FIELDS = new Set([
     'chat_id', 'request_id', 'request_type', 'status', 'message_id',
-    'accountant_notes', 'comment', 'from_hours', 'to_hours', 'task_group'
+    'accountant_notes', 'comment', 'from_hours', 'to_hours', 'task_group',
+    'time_from', 'time_to', 'request_date'
 ]);
 
-const MANAGER_CHAT_IDS = {
-    "7255512959": process.env.MANAGER_GROUP_CHAT_ID_1,
-};
+const MANAGER_CHAT_IDS = {};
 const DEFAULT_MANAGER_CHAT_ID = process.env.MANAGER_GROUP_CHAT_ID_2;
 
 function getManagerChatId(chatId) {

@@ -188,7 +188,30 @@ export async function loadModule(container, { chatId, userData }) {
   </div>
 </div>
 
-<div class="tt-toasts" id="toasts"></div>
+<div class="tt-modal-overlay" id="resultModal">
+  <div class="tt-modal-sheet">
+    <span class="tt-modal-close" id="closeResultModal">&times;</span>
+    <div class="tt-result-icon" id="resultIcon"></div>
+    <div class="tt-modal-title" id="resultTitle"></div>
+    <p class="tt-result-message" id="resultMessage"></p>
+    <div class="tt-modal-actions">
+      <button class="tt-modal-btn tt-modal-btn-primary" id="resultOkBtn">Понятно</button>
+    </div>
+  </div>
+</div>
+
+<div class="tt-modal-overlay" id="pendingConfirmModal">
+  <div class="tt-modal-sheet">
+    <span class="tt-modal-close" id="closePendingConfirmModal">&times;</span>
+    <div class="tt-result-icon">⚠️</div>
+    <div class="tt-modal-title">Уже есть запрос</div>
+    <p class="tt-result-message">У вас есть новый запрос, вы уверены что хотите отправить еще один?</p>
+    <div class="tt-modal-actions">
+      <button class="tt-modal-btn tt-modal-btn-primary" id="pendingConfirmYes">Да, отправить</button>
+      <button class="tt-modal-btn tt-modal-btn-secondary" id="pendingConfirmNo">Отмена</button>
+    </div>
+  </div>
+</div>
   `;
 
   const state = {
@@ -208,11 +231,11 @@ export async function loadModule(container, { chatId, userData }) {
     approvedRequests: {},
     vacationRequests: {},
     availableYears: [],
-    isMainRendered: false
+    isMainRendered: false,
+    pendingSubmitPayload: null
   };
 
   const $ = (id) => document.getElementById(id);
-  const toasts = $('toasts');
 
   const playErrorSound = () => {
     try {
@@ -248,12 +271,12 @@ export async function loadModule(container, { chatId, userData }) {
     }, 3000);
   };
 
-  const showToast = (msg, type = 'inf') => {
-    const t = document.createElement('div');
-    t.className = `tt-toast tt-toast-${type}`;
-    t.textContent = msg;
-    toasts.appendChild(t);
-    setTimeout(() => t.remove(), 2800);
+  const showResultModal = (type, title, message) => {
+    const iconMap = { ok: '✅', err: '❌', warn: '⚠️' };
+    $('resultIcon').textContent = iconMap[type] || 'ℹ️';
+    $('resultTitle').textContent = title;
+    $('resultMessage').textContent = message;
+    showModal('resultModal');
   };
 
   const showModal = (id) => {
@@ -274,6 +297,9 @@ export async function loadModule(container, { chatId, userData }) {
       }
     });
   });
+
+  $('closeResultModal')?.addEventListener('click', () => closeModal('resultModal'));
+  $('resultOkBtn')?.addEventListener('click', () => closeModal('resultModal'));
 
   if (!isRestricted) {
     document.querySelectorAll('.tt-tab').forEach(btn => {
@@ -418,6 +444,17 @@ export async function loadModule(container, { chatId, userData }) {
     }
   };
 
+  const hasPendingNewRequest = async () => {
+    try {
+      const res = await fetch(`/api/timetable/user-history/${chatId}`);
+      const result = await res.json();
+      if (result.success && result.requests) {
+        return result.requests.some(r => (r.status === 'new' || !r.status));
+      }
+    } catch (e) {}
+    return false;
+  };
+
   const buildGridHTML = () => {
     const year = state.currentYear;
     const month = state.currentMonth;
@@ -457,9 +494,8 @@ export async function loadModule(container, { chatId, userData }) {
       let timesHtml = '';
 
       if (isRestricted) {
-      const status = state.workDays?.[dateStr];
-      
-      if (status === 'doesnt work') {
+        const status = state.workDays?.[dateStr];
+        if (status === 'doesnt work') {
           cellClass += ' tt-cell-weekend';
           timesHtml = '<div class="tt-day-times"><span>Выходной</span></div>';
         } else if (status === 'vacation') {
@@ -592,62 +628,62 @@ export async function loadModule(container, { chatId, userData }) {
 
   const loadMainData = async () => {
     if (!state.isMainRendered) {
-        $('mainContainer').innerHTML = '<div class="tt-empty">⏳ Загрузка...</div>';
+      $('mainContainer').innerHTML = '<div class="tt-empty">⏳ Загрузка...</div>';
     } else if (!isRestricted) {
-        setCalendarLoading(true);
+      setCalendarLoading(true);
     }
 
     try {
-        const year = state.currentYear;
-        const month = String(state.currentMonth + 1).padStart(2, '0');
-        const url = `/api/timetable/attendance-data?year=${year}&month=${month}`;
-        const resp = await fetch(url);
-        const payload = await resp.json();
+      const year = state.currentYear;
+      const month = String(state.currentMonth + 1).padStart(2, '0');
+      const url = `/api/timetable/attendance-data?year=${year}&month=${month}`;
+      const resp = await fetch(url);
+      const payload = await resp.json();
 
-        if (payload.users) {
-            const currentUser = payload.users[0];
-            if (currentUser) {
-                state.userId = currentUser.id_1c;
-                state.userSchedule = { time_arrive: currentUser.time_arrive, time_leave: currentUser.time_leave };
-                state.vacationDays = parseFloat(currentUser.vacations_available || 0);
-            }
+      if (payload.users) {
+        const currentUser = payload.users[0];
+        if (currentUser) {
+          state.userId = currentUser.id_1c;
+          state.userSchedule = { time_arrive: currentUser.time_arrive, time_leave: currentUser.time_leave };
+          state.vacationDays = parseFloat(currentUser.vacations_available || 0);
         }
+      }
 
-        if (payload.schedule && state.userId) {
-            const userScheduleData = payload.schedule.find(s => s.id_1c === state.userId);
-            if (userScheduleData && userScheduleData.work_days) {
-                state.workDays = userScheduleData.work_days;
-            }
+      if (payload.schedule && state.userId) {
+        const userScheduleData = payload.schedule.find(s => s.id_1c === state.userId);
+        if (userScheduleData && userScheduleData.work_days) {
+          state.workDays = userScheduleData.work_days;
         }
+      }
 
-        if (!isRestricted && payload.hikvision && state.userId) {
-            state.attendanceData = payload.hikvision;
-        }
+      if (!isRestricted && payload.hikvision && state.userId) {
+        state.attendanceData = payload.hikvision;
+      }
 
-        if (!isRestricted) {
-            await loadApprovedRequests();
-        }
+      if (!isRestricted) {
+        await loadApprovedRequests();
+      }
 
-        if (!state.isMainRendered) {
-            renderMain();
-            state.isMainRendered = true;
-        } else {
-            const monthNames = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
-            const labelEl = document.querySelector('.tt-current-month');
-            if (labelEl) labelEl.textContent = `${monthNames[state.currentMonth]} ${state.currentYear}`;
-            const grid = document.querySelector('.tt-days-grid');
-            if (grid) { grid.innerHTML = buildGridHTML(); if (!isRestricted) attachGridListeners(); }
-            if (!isRestricted) setCalendarLoading(false);
-        }
+      if (!state.isMainRendered) {
+        renderMain();
+        state.isMainRendered = true;
+      } else {
+        const monthNames = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
+        const labelEl = document.querySelector('.tt-current-month');
+        if (labelEl) labelEl.textContent = `${monthNames[state.currentMonth]} ${state.currentYear}`;
+        const grid = document.querySelector('.tt-days-grid');
+        if (grid) { grid.innerHTML = buildGridHTML(); if (!isRestricted) attachGridListeners(); }
+        if (!isRestricted) setCalendarLoading(false);
+      }
     } catch (e) {
-        if (!state.isMainRendered) {
-            $('mainContainer').innerHTML = '<div class="tt-empty">⚠️ Ошибка загрузки</div>';
-        } else {
-            if (!isRestricted) setCalendarLoading(false);
-            showToast('Ошибка загрузки данных', 'err');
-        }
+      if (!state.isMainRendered) {
+        $('mainContainer').innerHTML = '<div class="tt-empty">⚠️ Ошибка загрузки</div>';
+      } else {
+        if (!isRestricted) setCalendarLoading(false);
+        showResultModal('err', 'Ошибка', 'Не удалось загрузить данные');
+      }
     }
-};
+  };
 
   const renderMain = () => {
     const mainContainer = $('mainContainer');
@@ -714,6 +750,81 @@ export async function loadModule(container, { chatId, userData }) {
     const grid = document.querySelector('.tt-days-grid');
     if (grid) { grid.innerHTML = buildGridHTML(); if (!isRestricted) attachGridListeners(); }
     if (!isRestricted) attachEventListeners();
+  };
+
+  const doSubmitRequest = async () => {
+    if (!state.pendingSubmitPayload) return;
+    const { from, to, type, selectedDates } = state.pendingSubmitPayload;
+
+    const btn = $('submitBtn');
+    if (btn) { btn.disabled = true; btn.textContent = 'Отправка...'; }
+
+    const requestId = generateRequestId(chatId);
+    const payload = {
+      request_id: requestId,
+      chat_id: chatId,
+      request_date: new Date().toISOString(),
+      request_type: type,
+      comment: $('comment')?.value || '',
+      time_from: from,
+      time_to: to,
+      status: 'new',
+    };
+
+    try {
+      const infoResponse = await fetch('/api/timetable/create-request-info', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ requestInfoPayload: payload })
+      });
+      if (!infoResponse.ok) throw new Error('Не удалось создать запрос');
+      const infoResult = await infoResponse.json();
+      const recordId = infoResult.data?.[0]?.id;
+
+      await Promise.all(selectedDates.map(d =>
+        fetch('/api/timetable/create-request-date', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ requestId, date: d })
+        })
+      ));
+
+      const notificationResult = await notifyManager({
+        id: recordId,
+        requestId,
+        taskGroup: type,
+        fromHours: payload.time_from,
+        toHours: payload.time_to,
+        comment: payload.comment,
+        dates: selectedDates
+      });
+
+      if (!notificationResult.success) throw new Error('Не удалось уведомить менеджера');
+
+      await fetch('/api/timetable/update-request-message', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ requestId, messageId: notificationResult.messageId })
+      });
+
+      showResultModal('ok', 'Запрос отправлен', 'Ваш запрос успешно отправлен. Менеджер получит уведомление и рассмотрит его.');
+
+      if ($('reqType')) $('reqType').value = '';
+      if ($('comment')) $('comment').value = '';
+      const today = new Date();
+      const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
+      state.selectedDates = [todayStr];
+      state.lastClickedDate = todayStr;
+      const g = document.querySelector('.tt-days-grid');
+      if (g) { g.innerHTML = buildGridHTML(); attachGridListeners(); }
+      if (document.querySelector('[data-tab="history"]')?.classList.contains('active')) loadUserHistory();
+      await loadApprovedRequests();
+    } catch (e) {
+      showResultModal('err', 'Ошибка', e.message || 'Не удалось отправить запрос');
+    } finally {
+      state.pendingSubmitPayload = null;
+      if (btn) { btn.disabled = false; btn.textContent = 'Отправить запрос'; }
+    }
   };
 
   const attachEventListeners = () => {
@@ -804,76 +915,56 @@ export async function loadModule(container, { chatId, userData }) {
     $('editTimeFrom')?.addEventListener('input', checkEditTypeOptions);
     $('editTimeTo')?.addEventListener('input', checkEditTypeOptions);
 
+    const mainScroll = document.querySelector('.tt-main-scroll');
+    if (mainScroll) {
+      mainScroll.addEventListener('touchstart', (e) => {
+        const tag = e.target.tagName;
+        if (tag !== 'INPUT' && tag !== 'TEXTAREA') {
+          document.activeElement?.blur();
+        }
+      }, { passive: true });
+    }
+
     $('submitBtn')?.addEventListener('click', async () => {
-      if (!state.selectedDates.length) { showToast('Выберите даты в календаре', 'err'); return; }
+      document.activeElement?.blur();
+      if (!state.selectedDates.length) {
+        showResultModal('err', 'Ошибка', 'Выберите даты в календаре');
+        return;
+      }
       const from = $('timeFrom').value;
       const to = $('timeTo').value;
-      if (from >= to) { showToast('Время окончания должно быть позже начала', 'err'); return; }
+      if (from >= to) {
+        showResultModal('err', 'Ошибка', 'Время окончания должно быть позже начала');
+        return;
+      }
       const type = $('reqType').value;
       if (!type) { showTypeError(); return; }
-      state.selectedDates = autoExpandToFullWeekIfNeeded(state.selectedDates);
-      const btn = $('submitBtn');
-      btn.disabled = true;
-      btn.textContent = 'Отправка...';
-      const requestId = generateRequestId(chatId);
-      const payload = {
-        request_id: requestId,
-        chat_id: chatId,
-        request_date: new Date().toISOString(),
-        request_type: type,
-        comment: $('comment').value || '',
-        time_from: from,
-        time_to: to,
-        status: 'new',
-      };
-      try {
-        const infoResponse = await fetch('/api/timetable/create-request-info', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ requestInfoPayload: payload })
-        });
-        if (!infoResponse.ok) throw new Error('Не удалось создать запрос');
-        const infoResult = await infoResponse.json();
-        const recordId = infoResult.data?.[0]?.id;
-        await Promise.all(state.selectedDates.map(d =>
-          fetch('/api/timetable/create-request-date', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ requestId, date: d })
-          })
-        ));
-        const notificationResult = await notifyManager({
-          id: recordId,
-          requestId,
-          taskGroup: type,
-          fromHours: payload.time_from,
-          toHours: payload.time_to,
-          comment: payload.comment,
-          dates: state.selectedDates
-        });
-        if (!notificationResult.success) throw new Error('Не удалось уведомить менеджера');
-        await fetch('/api/timetable/update-request-message', {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ requestId, messageId: notificationResult.messageId })
-        });
-        showToast('Запрос отправлен', 'ok');
-        $('reqType').value = '';
-        $('comment').value = '';
-        const today = new Date();
-        const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
-        state.selectedDates = [todayStr];
-        state.lastClickedDate = todayStr;
-        const g = document.querySelector('.tt-days-grid');
-        if (g) { g.innerHTML = buildGridHTML(); attachGridListeners(); }
-        if (document.querySelector('[data-tab="history"]')?.classList.contains('active')) loadUserHistory();
-        await loadApprovedRequests();
-      } catch (e) {
-        showToast('Ошибка: ' + e.message, 'err');
-      } finally {
-        btn.disabled = false;
-        btn.textContent = 'Отправить запрос';
+
+      const expandedDates = autoExpandToFullWeekIfNeeded(state.selectedDates);
+      state.pendingSubmitPayload = { from, to, type, selectedDates: expandedDates };
+
+      const hasPending = await hasPendingNewRequest();
+      if (hasPending) {
+        showModal('pendingConfirmModal');
+        return;
       }
+
+      await doSubmitRequest();
+    });
+
+    $('pendingConfirmYes')?.addEventListener('click', async () => {
+      closeModal('pendingConfirmModal');
+      await doSubmitRequest();
+    });
+
+    $('pendingConfirmNo')?.addEventListener('click', () => {
+      closeModal('pendingConfirmModal');
+      state.pendingSubmitPayload = null;
+    });
+
+    $('closePendingConfirmModal')?.addEventListener('click', () => {
+      closeModal('pendingConfirmModal');
+      state.pendingSubmitPayload = null;
     });
 
     $('closeEditModal')?.addEventListener('click', () => closeModal('editModal'));
@@ -883,12 +974,21 @@ export async function loadModule(container, { chatId, userData }) {
 
     $('editForm')?.addEventListener('submit', async (e) => {
       e.preventDefault();
-      if (state.editSelectedDates.length === 0) { showToast('Выберите даты', 'err'); return; }
+      if (state.editSelectedDates.length === 0) {
+        showResultModal('err', 'Ошибка', 'Выберите даты');
+        return;
+      }
       const from = $('editTimeFrom').value;
       const to = $('editTimeTo').value;
-      if (from >= to) { showToast('Время окончания должно быть позже начала', 'err'); return; }
+      if (from >= to) {
+        showResultModal('err', 'Ошибка', 'Время окончания должно быть позже начала');
+        return;
+      }
       const type = $('editReqType').value;
-      if (!type) { showToast('Выберите тип запроса', 'err'); return; }
+      if (!type) {
+        showResultModal('err', 'Ошибка', 'Выберите тип запроса');
+        return;
+      }
       const requestId = $('editRequestId').value;
       const messageId = $('editMessageId').value;
       const btn = $('editSubmitBtn');
@@ -928,12 +1028,12 @@ export async function loadModule(container, { chatId, userData }) {
             dates: state.editSelectedDates
           });
         }
-        showToast('Запрос обновлен', 'ok');
         closeModal('editModal');
+        showResultModal('ok', 'Запрос обновлен', 'Изменения успешно сохранены.');
         loadUserHistory();
         await loadApprovedRequests();
       } catch (e) {
-        showToast('Ошибка: ' + e.message, 'err');
+        showResultModal('err', 'Ошибка', e.message || 'Не удалось сохранить изменения');
       } finally {
         btn.disabled = false;
         btn.textContent = 'Сохранить';
@@ -1091,11 +1191,11 @@ export async function loadModule(container, { chatId, userData }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ requestId })
       });
-      showToast('Запрос удален', 'ok');
+      showResultModal('ok', 'Удалено', 'Запрос успешно удален.');
       loadUserHistory();
       await loadApprovedRequests();
     } catch (error) {
-      showToast('Ошибка удаления', 'err');
+      showResultModal('err', 'Ошибка', 'Не удалось удалить запрос');
     } finally {
       state.currentDeleteRequest = null;
     }
