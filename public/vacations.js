@@ -637,8 +637,8 @@ export async function loadModule(container) {
 
     async function saveCorrection() {
       const newValue = parseFloat(correctionInput.value);
-      if (isNaN(newValue) || newValue < 0) {
-        alert('Пожалуйста, введите корректное положительное число');
+      if (isNaN(newValue)) {
+        alert('Пожалуйста, введите корректное число');
         return;
       }
 

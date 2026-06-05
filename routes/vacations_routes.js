@@ -73,7 +73,7 @@ router.post('/vacations/correct-available', requireRole(...VACATION_ROLES), asyn
         if (!userName || typeof userName !== 'string' || userName.trim().length === 0) {
             return res.status(400).json({ error: 'Invalid userName' });
         }
-        if (newValue === undefined || typeof newValue !== 'number' || isNaN(newValue) || newValue < 0) {
+        if (newValue === undefined || typeof newValue !== 'number' || isNaN(newValue)) {
             return res.status(400).json({ error: 'Invalid newValue' });
         }
 
@@ -224,7 +224,7 @@ router.post('/vacations/bulk-update-available', requireRole(...VACATION_ROLES), 
         const errors = [];
 
         for (const { id_1c, newValue } of updates) {
-            if (!id_1c || typeof newValue !== 'number' || isNaN(newValue) || newValue < 0) {
+            if (!id_1c || typeof newValue !== 'number' || isNaN(newValue)) {
                 errors.push({ id_1c, error: 'Invalid id_1c or newValue' });
                 continue;
             }
