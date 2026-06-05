@@ -18,7 +18,11 @@ const ALLOWED_USER_FIELDS = new Set([
     'time_leave',
     'access',
     'notify_violations',
-    'work_days'
+    'work_days',
+    'vacations_available',
+    'groups',               
+    'groups_msg',           
+    'user_category'         
 ]);
 
 function isValidId(val) {

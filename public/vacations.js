@@ -649,7 +649,7 @@ export async function loadModule(container) {
         const res = await fetch('/api/vacations/correct-available', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ userName: currentUser, newValue: newValue.toString() })
+          body: JSON.stringify({ userName: currentUser, newValue: newValue })
         });
 
         const data = await res.json();
