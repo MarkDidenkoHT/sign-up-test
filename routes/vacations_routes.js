@@ -159,7 +159,7 @@ router.get('/vacations/requests', requireRole(...VACATION_ROLES), async (req, re
         const [reqInfo, reqDates, users] = await Promise.all([
             supabase.from('requests_info').select('chat_id,request_id,time_from,time_to,status,accountant_notes').eq('request_type', 'vacation').eq('status', 'approved'),
             supabase.from('requests_dates').select('request_id,date'),
-            supabase.from('users').select('chat_id,user_name,id_1c,vacations_available')
+            supabase.from('users').select('chat_id,user_name,id_1c,vacations_available').eq('access', true)
         ]);
 
         if (reqInfo.error) throw reqInfo.error;
