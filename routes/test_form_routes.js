@@ -37,7 +37,7 @@ function isValidUUID(value) {
 function isValidId(value) {
   if (typeof value !== 'string' && typeof value !== 'number') return false;
   const s = String(value);
-  return /^\d{1,20}$/.test(s) || isValidUUID(s);
+  return /^\d{1,20}$/.test(s) || isValidUUID(s) || /^[\w\-]{1,100}$/.test(s);
 }
 
 function safeStr(value, maxLen = 500) {
@@ -442,6 +442,7 @@ router.post('/take-test/submit', submitLimiter, async (req, res) => {
 
     const validQuestionIds = new Set((test.questions || []).map(q => q.id));
     const questionsMap = new Map((test.questions || []).map(q => [q.id, q]));
+    
 
     const sanitizedAnswers = answers
       .filter(a => a && typeof a === 'object' && validQuestionIds.has(a.question_id))
