@@ -3,6 +3,10 @@
 const cron = require('node-cron');
 const { getSupabase, getCronRecord, updateCronRecord } = require('./lib');
 
+// Global kill switch — set CRON_ENABLED=false (in .env / environment) to
+// pause and disable ALL cron jobs without touching the database.
+const CRON_ENABLED = process.env.CRON_ENABLED !== 'false';
+
 const jobs = [
   require('./jobs/accrueMonthlyVacations'),
   require('./jobs/generateMonthlySchedule'),
@@ -53,6 +57,11 @@ async function checkMissedRun(job) {
 }
 
 function initCron() {
+  if (!CRON_ENABLED) {
+    console.log('[cron] CRON_ENABLED=false — all cron jobs are paused/disabled');
+    return;
+  }
+
   for (const job of jobs) {
     checkMissedRun(job).catch(err =>
       console.error(`[cron] missed run check failed for "${job.name}":`, err)
