@@ -1221,19 +1221,11 @@ Perplexity, Gemini и др.) точно извлечь характеристи�
 Код: ${product.code}${featuresBlock ? `\n\nХарактеристики:\n${featuresBlock}` : ''}`;
   }
 
-async function callMistral(messages, maxTokens, useSecondaryKey = false) {
-    
-    const response = await fetch('/api/gemma/generate', {
+async function callDeepSeek(messages, maxTokens, temperature = 0.9) {
+    const response = await fetch('/api/deepseek/generate', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            model: 'mistral-large-latest',
-            max_tokens: maxTokens,
-            messages,
-            use_secondary_key: useSecondaryKey
-        })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages, max_tokens: maxTokens, temperature })
     });
 
     const data = await response.json();
@@ -1241,18 +1233,16 @@ async function callMistral(messages, maxTokens, useSecondaryKey = false) {
     return data.content || '';
 }
 
-  async function generateForProduct(product) {
+async function generateForProduct(product) {
     const systemPrompt = buildSystemPrompt();
     const userMessage = buildUserMessage(product);
 
     const messages = [];
-    if (systemPrompt) {
-        messages.push({ role: 'system', content: systemPrompt });
-    }
+    if (systemPrompt) messages.push({ role: 'system', content: systemPrompt });
     messages.push({ role: 'user', content: userMessage });
 
-    return await callMistral(messages, 1000);
-  }
+    return await callDeepSeek(messages, 1000, 0.9);
+}
 
 async function generateTagsForProduct(product) {
     const userMessage = buildTagsUserMessage(product);
@@ -1263,7 +1253,7 @@ async function generateTagsForProduct(product) {
         { role: 'user', content: userMessage }
     ];
 
-    const raw = await callMistral(messages, 200, true); // true = use secondary key
+    const raw = await callDeepSeek(messages, 200, 1);
     const tags = raw.trim().split(',').map(t => t.trim()).filter(t => t.length > 0 && t.length < 60);
     return tags.slice(0, 7);
 }
@@ -1273,8 +1263,7 @@ async function runAiValidation(product, text) {
         { role: 'system', content: VALIDATION_SYSTEM_PROMPT },
         { role: 'user', content: `Товар: ${product.name}\n\nТекст для проверки (верни его ПОЛНОСТЬЮ, исправив только ошибочные слова):\n${text}` }
     ];
-    const result = await callMistral(messages, 1200, false);
-    return result;
+    return await callDeepSeek(messages, 1200, 0.3);
 }
 
   async function runLanguageToolCheck(text) {
